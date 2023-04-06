@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class InputManager : Singleton<InputManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    private PlayerControls playerControls;
+
+
+
+
+    public Vector2 GetMovement()
     {
-        
+        return playerControls.Player.Movement.ReadValue<Vector2>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public bool GetButton1()
     {
-        
+        return playerControls.Player.Button1.triggered;
     }
+
+    public bool GetButton2()
+    {
+        return playerControls.Player.Button2.triggered;
+    }
+
 }
