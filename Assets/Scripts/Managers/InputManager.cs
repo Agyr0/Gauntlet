@@ -7,7 +7,15 @@ public class InputManager : Singleton<InputManager>
     private PlayerControls playerControls;
 
 
-
+    private void OnEnable()
+    {
+        playerControls = new PlayerControls();
+        playerControls.Enable();
+    }
+    private void OnDisable()
+    {
+        playerControls.Disable();
+    }
 
     public Vector2 GetMovement()
     {

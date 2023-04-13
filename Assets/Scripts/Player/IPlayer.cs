@@ -11,6 +11,7 @@ public enum ClassEnum
 public interface IPlayer
 {
     public GameObject PlayerPrefab { get; }
+    public GameObject ProjectilePrefab { get; }
     public ClassData CurClass { get; }
     public ClassEnum ClassType { get; }
     public float MaxHealth { get; }

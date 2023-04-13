@@ -6,6 +6,7 @@ using UnityEngine;
 public class ClassData : ScriptableObject, IPlayer
 {
     public GameObject playerPrefab;
+    public GameObject projectilePrefab;
     public ClassData curClass;
     public ClassEnum classType;
     public float maxHealth;
@@ -24,6 +25,10 @@ public class ClassData : ScriptableObject, IPlayer
     public GameObject PlayerPrefab
     {
         get { return playerPrefab; }
+    }
+    public GameObject ProjectilePrefab 
+    { 
+        get { return projectilePrefab; }
     }
     public ClassData CurClass
     {

@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Player : IPlayer
 {
     public GameObject PlayerPrefab { get; }
+    public GameObject ProjectilePrefab { get; }
     public ClassData CurClass { get; }
     public ClassEnum ClassType { get; }
     public float MaxHealth { get; }

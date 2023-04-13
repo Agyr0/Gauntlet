@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: WarriorData
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 999021191262322043, guid: 1ba6d9ba3fb53fa458e51486c6665694, type: 3}
   curClass: {fileID: 0}
   classType: 0
   maxHealth: 0
   curHealth: 0
+  baseSpeed: 0
+  curSpeed: 10
   keys: 0
   potions: 0
   numItems: 0
