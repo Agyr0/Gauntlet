@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int health;
     [SerializeField] protected int damage;
     [SerializeField] protected float swingCooldown;
+    [SerializeField] protected float moveDelay;
     private bool canStrike = true;
     private bool canMove;
 
@@ -13,7 +14,6 @@ public class Enemy : MonoBehaviour
     private void OnBecameVisible()
     {
         Debug.Log("I'm Visible");
-
         canMove = true;
         //Move();
     }
@@ -22,12 +22,14 @@ public class Enemy : MonoBehaviour
     //check for layer "Player"
     protected IEnumerator Move()
     {
-        while(canMove)
+        if(canMove)
         {
-
+            yield return new WaitForSeconds(moveDelay);
         }
-
-        yield return null;
+        else
+        {
+            yield return null;
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
