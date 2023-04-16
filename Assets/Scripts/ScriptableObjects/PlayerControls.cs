@@ -62,6 +62,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Join"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c44891d-0b7e-4a8b-a12e-fda0e73dd4bd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -200,11 +209,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""86f59fb3-13a9-4286-a760-99ddaec3835f"",
-                    ""path"": ""<Gamepad>/start"",
+                    ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9700312-f42c-4aa4-a5c6-09fc54d54701"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7635d13c-274d-4e8a-984d-df5613c2958a"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -219,6 +250,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Button1 = m_Player.FindAction("Button1", throwIfNotFound: true);
         m_Player_Button2 = m_Player.FindAction("Button2", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_Join = m_Player.FindAction("Join", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -282,6 +314,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Button1;
     private readonly InputAction m_Player_Button2;
     private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_Join;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -290,6 +323,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Button1 => m_Wrapper.m_Player_Button1;
         public InputAction @Button2 => m_Wrapper.m_Player_Button2;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @Join => m_Wrapper.m_Player_Join;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -311,6 +345,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Join.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJoin;
+                @Join.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJoin;
+                @Join.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJoin;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -327,6 +364,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @Join.started += instance.OnJoin;
+                @Join.performed += instance.OnJoin;
+                @Join.canceled += instance.OnJoin;
             }
         }
     }
@@ -337,5 +377,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnButton1(InputAction.CallbackContext context);
         void OnButton2(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnJoin(InputAction.CallbackContext context);
     }
 }

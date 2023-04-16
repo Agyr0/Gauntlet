@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot = true;
-    public bool isShooting = false;
 
 
     private void Start()
@@ -31,12 +30,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (canMove && !isShooting)
+        if (canMove)
             HandleMovement();
         if (canShoot)
             HandleShoot();
 
-        Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
+        //Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
     }
 
     private void HandleMovement()
@@ -66,21 +65,24 @@ public class PlayerController : MonoBehaviour
         transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
     }
 
-   
+    
+
 
     private void HandleShoot()
     {
-        if (inputManager.GetButton1() && !isShooting)
+        if (inputManager.GetButton1())
         {
+            canShoot = !canShoot;
+            canMove = !canMove;
             StartCoroutine(ShootOnce());
-            isShooting = !isShooting;
         }
     }
 
     private IEnumerator ShootOnce()
     {
-        GameObject bullet = Instantiate(classData.ProjectilePrefab, transform.position, Quaternion.LookRotation(transform.forward));
+        GameObject bullet = Instantiate(classData.ProjectilePrefab, new Vector3( transform.position.x, transform.position.y + (controller.height / 2), transform.position.z), Quaternion.LookRotation(transform.forward));
         yield return new WaitForSeconds(classData.ShootTime);
-        isShooting = !isShooting;
+        canShoot = !canShoot;
+        canMove = !canMove;
     }
 }
