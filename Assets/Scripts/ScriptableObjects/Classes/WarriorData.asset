@@ -20,6 +20,7 @@ MonoBehaviour:
   curHealth: 0
   baseSpeed: 0
   curSpeed: 10
+  shootTime: 0.3
   keys: 0
   potions: 0
   numItems: 0

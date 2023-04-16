@@ -5,20 +5,36 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Class Data", fileName = "NewClassData", order = 1)]
 public class ClassData : ScriptableObject, IPlayer
 {
-    public GameObject playerPrefab;
-    public GameObject projectilePrefab;
-    public ClassData curClass;
-    public ClassEnum classType;
-    public float maxHealth;
-    public float curHealth;
-    public float baseSpeed;
-    public float curSpeed;
-    public int keys;
-    public int potions;
-    public int numItems;
-    public float melee;
-    public float strength;
-    public float magic;
+    [SerializeField]
+    private GameObject playerPrefab;
+    [SerializeField]
+    private GameObject projectilePrefab;
+    [SerializeField]
+    private ClassData curClass;
+    [SerializeField]
+    private ClassEnum classType;
+    [SerializeField]
+    private float maxHealth;
+    [SerializeField]
+    private float curHealth;
+    [SerializeField]
+    private float baseSpeed;
+    [SerializeField]
+    private float curSpeed;
+    [SerializeField]
+    private float shootTime;
+    [SerializeField]
+    private int keys;
+    [SerializeField]
+    private int potions;
+    [SerializeField]
+    private int numItems;
+    [SerializeField]
+    private float melee;
+    [SerializeField]
+    private float strength;
+    [SerializeField]
+    private float magic;
 
 
 
@@ -53,6 +69,10 @@ public class ClassData : ScriptableObject, IPlayer
     public float CurSpeed
     {
         get { return curSpeed; }
+    }
+    public float ShootTime 
+    {
+        get { return shootTime; } 
     }
     public int Keys
     {

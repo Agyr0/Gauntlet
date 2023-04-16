@@ -563,9 +563,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classData: {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
-  players: []
   canMove: 1
   canShoot: 1
+  isShooting: 0
 --- !u!1 &1383120974
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,7 +790,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 1286057975}
-  m_Follow: {fileID: 1286057975}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 7

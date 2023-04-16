@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     public ClassData classData;
     public IPlayer player;
+    private Vector3 playerVelocity;
+    private ScreenBorder screenBorder;
 
     private CharacterController controller;
     private bool isGrounded;
@@ -14,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot = true;
+    public bool isShooting = false;
 
 
     private void Start()
@@ -23,14 +26,17 @@ public class PlayerController : MonoBehaviour
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
         player = new Player(classData);
+        screenBorder = new ScreenBorder();
     }
 
     private void Update()
     {
-        if (canMove)
+        if (canMove && !isShooting)
             HandleMovement();
         if (canShoot)
             HandleShoot();
+
+        Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
     }
 
     private void HandleMovement()
@@ -41,31 +47,40 @@ public class PlayerController : MonoBehaviour
         //Get input 
         Vector2 movement = inputManager.GetMovement();
         //Get Vector3 from input Vector2
-        Vector3 move = new Vector3(movement.x, 0, movement.y);
+        playerVelocity = new Vector3(movement.x, 0, movement.y);
         //Make sure movement takes in camera rotation
-        move = mainCamTransform.TransformDirection(movement);
-        move.y = 0f;
+        playerVelocity = mainCamTransform.TransformDirection(movement);
+        playerVelocity.y = 0f;
+
         //Move character from move Vecotr3
-        controller.Move(move * Time.deltaTime * player.CurSpeed);
+        controller.Move(playerVelocity * Time.deltaTime * classData.CurSpeed);
+
 
         //Rotate towards movement
-        if(move != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(move);
+        if(playerVelocity != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(playerVelocity);
     }
+
+    private void LateUpdate()
+    {
+        transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
+    }
+
+   
 
     private void HandleShoot()
     {
-        if (inputManager.GetButton1())
+        if (inputManager.GetButton1() && !isShooting)
         {
-            Debug.Log(player.ProjectilePrefab);
-            Debug.Log(classData.ProjectilePrefab);
-            ShootOnce();
+            StartCoroutine(ShootOnce());
+            isShooting = !isShooting;
         }
     }
 
-    private void ShootOnce()
+    private IEnumerator ShootOnce()
     {
-        GameObject bullet = Instantiate(player.ProjectilePrefab, transform.position, Quaternion.LookRotation(transform.forward));
-
+        GameObject bullet = Instantiate(classData.ProjectilePrefab, transform.position, Quaternion.LookRotation(transform.forward));
+        yield return new WaitForSeconds(classData.ShootTime);
+        isShooting = !isShooting;
     }
 }

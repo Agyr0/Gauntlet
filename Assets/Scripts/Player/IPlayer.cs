@@ -10,18 +10,19 @@ public enum ClassEnum
 }
 public interface IPlayer
 {
-    public GameObject PlayerPrefab { get; }
-    public GameObject ProjectilePrefab { get; }
-    public ClassData CurClass { get; }
-    public ClassEnum ClassType { get; }
-    public float MaxHealth { get; }
-    public float CurHealth { get; }
-    public float BaseSpeed { get; }
-    public float CurSpeed { get; }
-    public int Keys { get; }
-    public int Potions { get; }
-    public int NumItems { get; }
-    public float Melee { get; }
-    public float Strength { get; }
-    public float Magic { get; }
+    GameObject PlayerPrefab { get; }
+    GameObject ProjectilePrefab { get; }
+    ClassData CurClass { get; }
+    ClassEnum ClassType { get; }
+    float MaxHealth { get; }
+    float CurHealth { get; }
+    float BaseSpeed { get; }
+    float CurSpeed { get; }
+    float ShootTime { get; }
+    int Keys { get; }
+    int Potions { get; }
+    int NumItems { get; }
+    float Melee { get; }
+    float Strength { get; }
+    float Magic { get; }
 }
