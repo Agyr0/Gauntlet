@@ -18,7 +18,7 @@ public class BulletController : MonoBehaviour
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        if (screenBorder.IsOutside(transform))
+        if (screenBorder.IsOutside(transform, capsuleCollider.height, capsuleCollider.height))
             Destroy(gameObject);
     }
 }

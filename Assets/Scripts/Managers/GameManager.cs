@@ -20,23 +20,13 @@ public class ScreenBorder
 
     
     //Returns true if self + object radius is outside of screen border
-    public bool IsOutside(Transform self)
+    public bool IsOutside(Transform self, float height, float width)
     {
-        Renderer renderer = null;
+        if ((((self.position.x < (size.x * -1) + width + Camera.main.transform.position.x) || (self.position.x > (size.x) - width + Camera.main.transform.position.x) ||
+                (self.position.z < (size.y * -1) + height + Camera.main.transform.position.z) || (self.position.z > (size.y) - height + Camera.main.transform.position.z))))
+            return true;
 
-        //for (int i = 0; i < self.childCount; i++)
-        //{
-        //    if(self)
-        //}
-        if(self.GetComponent<Renderer>().isVisible)
-            return false;
-
-        return true;
-        //if ((((self.position.x < (size.x * -1) + width) || (self.position.x > (size.x) - width) ||
-        //        (self.position.z < (size.y * -1) + height) || (self.position.z > (size.y) - height))))
-        //    return true;
-
-        //return false;
+        return false;
     }
 
     //Returns a Vector3 that has X and Z clamped to the inside of the screen
@@ -44,8 +34,8 @@ public class ScreenBorder
     {
         Vector3 returnVec = self.position;
 
-        returnVec.x = Mathf.Clamp(returnVec.x, size.x * -1 + width, size.x - width);
-        returnVec.z = Mathf.Clamp(returnVec.z, size.y * -1 + height, size.y - height);
+        returnVec.x = Mathf.Clamp(returnVec.x, size.x * -1 + width + Camera.main.transform.position.x, size.x - width + Camera.main.transform.position.x);
+        returnVec.z = Mathf.Clamp(returnVec.z, size.y * -1 + height + Camera.main.transform.position.z, size.y - height + Camera.main.transform.position.z);
 
        
 
