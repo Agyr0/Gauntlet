@@ -26,11 +26,6 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
 
-
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         if(players.Count != 0)
@@ -44,6 +39,8 @@ public class PlayerManager : Singleton<PlayerManager>
         players.Add(player);
 
         Transform playerParent = player.transform.parent;
+        //Debug.Log(playerParent.name);
+        InventoryManager.Instance.LinkInventory(player.gameObject.GetComponent<PlayerController>());
         //playerParent.position = FindSpawnPos();
 
     }
