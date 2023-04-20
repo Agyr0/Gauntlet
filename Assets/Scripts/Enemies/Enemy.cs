@@ -8,28 +8,25 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float swingCooldown;
     [SerializeField] protected float moveDelay;
     private bool canStrike = true;
-    private bool canMove;
+    private GameObject targetPlayer;
+    private LayerMask playerMask = 3;
 
     //Remember this can be triggered by the scene view camera
     private void OnBecameVisible()
     {
         Debug.Log("I'm Visible");
-        canMove = true;
-        //Move();
+    }
+    
+    private void OnEnable()
+    {
+        //reset target player
     }
 
-
-    //check for layer "Player"
+    //check for layer "Player" bitmask overlap sphere?
+    //target closest player
     protected IEnumerator Move()
     {
-        if(canMove)
-        {
-            yield return new WaitForSeconds(moveDelay);
-        }
-        else
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(moveDelay);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
@@ -44,7 +41,7 @@ public class Enemy : MonoBehaviour
     {
         canStrike = false;
         yield return new WaitForSeconds(swingCooldown);
-        Debug.Log("swing"); //Get playerData? component in collision and call its "TakeDamage(int)" passing this->damage
+        Debug.Log("swing"); //Get playerData? component in collision and call victim.TakeDamage(int damage)?
         canStrike = true;
     }
 
@@ -60,6 +57,6 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
