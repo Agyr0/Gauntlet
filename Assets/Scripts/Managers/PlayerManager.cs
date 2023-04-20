@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,44 +8,51 @@ using UnityEngine.InputSystem;
 public class PlayerManager : Singleton<PlayerManager>
 {
     [Header("Info")]
-    private PlayerInputManager inputManager;
-    public List<PlayerInput> players = new List<PlayerInput>();
+    private PlayerInputManager playerManager;
+    public List<PlayerConfiguration> playerConfigs = new List<PlayerConfiguration>();
     [SerializeField] private GameObject camTarget;
 
     [Header("Variables")]
     [SerializeField] private float spawnRadius = 3f;
+    [SerializeField]
+    private int maxPlayers = 4;
+
 
 
     private void OnEnable()
     {
-        inputManager = GetComponent<PlayerInputManager>();
-        inputManager.onPlayerJoined += PlayerJoined;
+        playerManager = GetComponent<PlayerInputManager>();
+        playerManager.EnableJoining();
     }
-    private void OnDisable()
-    {
-        inputManager.onPlayerJoined -= PlayerJoined;
-    }
+
 
 
     private void Update()
     {
-        if(players.Count != 0)
+        if(playerConfigs.Count != 0)
             camTarget.transform.position = SetAvgPosition();
         
     }
 
-    public void PlayerJoined(PlayerInput player)
+    public void HandlePlayerJoin(PlayerInput player)
     {
         EventBus.Publish(EventType.PLAYER_JOINED);
-        players.Add(player);
+        Debug.Log("Player Joined" + player.playerIndex);
+        if(!playerConfigs.Any(p => p.PlayerIndex == player.playerIndex))
+        {
+            player.transform.SetParent(transform);
+            playerConfigs.Add(new PlayerConfiguration(player));
+        }
 
-        Transform playerParent = player.transform.parent;
-        //Debug.Log(playerParent.name);
+        
+        //player.SwitchCurrentControlScheme("Controller", Keyboard.current, Mouse.current);
+        //Transform playerParent = player.transform.parent;
+        ////Debug.Log(playerParent.name);
         InventoryManager.Instance.LinkInventory(player.gameObject.GetComponent<PlayerController>());
-        //playerParent.position = FindSpawnPos();
+        ////playerParent.position = FindSpawnPos();
 
     }
-    public void PlayerLeft(PlayerInput player)
+    public void HandlePlayerLeft(PlayerInput player)
     {
         EventBus.Publish(EventType.PLAYER_LEFT);
     }
@@ -68,15 +76,27 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         float totalX = 0f;
         float totalZ = 0f;
-        foreach (PlayerInput player in players) 
+        foreach (PlayerConfiguration player in playerConfigs) 
         {
-            totalX += player.transform.position.x;
-            totalZ += player.transform.position.z;
+            totalX += player.Input.transform.position.x;
+            totalZ += player.Input.transform.position.z;
         }
-        float avgX = totalX / players.Count;
-        float avgZ = totalZ / players.Count;
+        float avgX = totalX / playerConfigs.Count;
+        float avgZ = totalZ / playerConfigs.Count;
 
         return new Vector3(avgX, 0, avgZ);
 
     }
+}
+public class PlayerConfiguration
+{
+    public PlayerConfiguration(PlayerInput player)
+    {
+        PlayerIndex = player.playerIndex;
+        Input = player;
+    }
+
+    public PlayerInput Input { get; set; }
+    public int PlayerIndex { get; set; }
+    public bool IsReady { get; set; }
 }

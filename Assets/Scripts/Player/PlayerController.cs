@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,20 +13,34 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private bool isGrounded;
     private GameManager gameManager;
+
+    private PlayerConfiguration _playerConfig;
+    private PlayerInput _playerInput;
     private InputManager inputManager;
+
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot = true;
 
 
+    #region Input
+    private Vector2 movement;
+    private bool hasShot = false;
+    #endregion
+
     private void Start()
     {
         gameManager = GameManager.Instance;
-        inputManager = InputManager.Instance;
+        _playerInput = GetComponent<PlayerInput>();
+        _playerConfig = PlayerManager.Instance.playerConfigs[_playerInput.playerIndex];
+
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
         player = new Player(classData);
         screenBorder = new ScreenBorder();
+
+
+
     }
 
     private void Update()
@@ -35,8 +50,26 @@ public class PlayerController : MonoBehaviour
         if (canShoot)
             HandleShoot();
 
-        //Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
+        ////Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
     }
+    private void LateUpdate()
+    {
+        transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
+    }
+
+    #region Player Input Functions
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        movement = context.ReadValue<Vector2>();
+    }
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        hasShot = context.action.triggered;
+    }
+
+    #endregion
+
+    #region ConstantFunctions
 
     private void HandleMovement()
     {
@@ -44,7 +77,6 @@ public class PlayerController : MonoBehaviour
         isGrounded = controller.isGrounded;
 
         //Get input 
-        Vector2 movement = inputManager.GetMovement();
         //Get Vector3 from input Vector2
         playerVelocity = new Vector3(movement.x, 0, movement.y);
         //Make sure movement takes in camera rotation
@@ -60,17 +92,9 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(playerVelocity);
     }
 
-    private void LateUpdate()
-    {
-        transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
-    }
-
-    
-
-
     private void HandleShoot()
     {
-        if (inputManager.GetButton1())
+        if (hasShot)
         {
             canShoot = !canShoot;
             canMove = !canMove;
@@ -85,4 +109,6 @@ public class PlayerController : MonoBehaviour
         canShoot = !canShoot;
         canMove = !canMove;
     }
+
+    #endregion
 }
