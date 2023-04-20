@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region ConstantFunctions
+    #region Constant Functions
 
     private void HandleMovement()
     {
@@ -81,15 +81,15 @@ public class PlayerController : MonoBehaviour
         playerVelocity = new Vector3(movement.x, 0, movement.y);
         //Make sure movement takes in camera rotation
         playerVelocity = mainCamTransform.TransformDirection(movement);
-        playerVelocity.y = 0f;
+        playerVelocity.y = -1f;
 
         //Move character from move Vecotr3
         controller.Move(playerVelocity * Time.deltaTime * classData.CurSpeed);
 
-
         //Rotate towards movement
+        Vector3 lookDirection = new Vector3(playerVelocity.x, 0, playerVelocity.z);
         if(playerVelocity != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(playerVelocity);
+            transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
     private void HandleShoot()

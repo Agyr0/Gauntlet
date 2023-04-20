@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using UnityEngine;
@@ -44,12 +45,10 @@ public class PlayerManager : Singleton<PlayerManager>
             playerConfigs.Add(new PlayerConfiguration(player));
         }
 
-        
-        //player.SwitchCurrentControlScheme("Controller", Keyboard.current, Mouse.current);
-        //Transform playerParent = player.transform.parent;
-        ////Debug.Log(playerParent.name);
         InventoryManager.Instance.LinkInventory(player.gameObject.GetComponent<PlayerController>());
-        ////playerParent.position = FindSpawnPos();
+        playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = false;
+        playerConfigs[player.playerIndex].PlayerParent.position = FindSpawnPos();
+        playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = transform;
 
     }
     public void HandlePlayerLeft(PlayerInput player)
@@ -60,15 +59,25 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private Vector3 FindSpawnPos()
     {
-        bool foundPos = false;
-        Vector2 spawnPos = Vector2.zero;
-        while (!foundPos)
+        Vector2 newPos = Random.insideUnitCircle * spawnRadius;
+        int maxTrys = 10;
+        int curTry = 0;
+        while (curTry < maxTrys)
         {
-            spawnPos = Random.insideUnitCircle * spawnRadius;
+            curTry++;
+            Debug.Log("Finding available spawn location");
+            newPos = Random.insideUnitCircle * spawnRadius;
 
-            if (!Physics.CheckSphere(spawnPos, spawnRadius))
-                foundPos = true;
+            if (!Physics.CheckSphere(newPos, spawnRadius, ~LayerMask.GetMask("Floor")))
+            {
+                Debug.Log("Spawn location found at " + newPos);
+                break;
+            }
         }
+        if(curTry >= maxTrys)
+            Debug.LogError("Couldn't find a good spawn location \nGoing to default spawn location");
+        
+        Vector3 spawnPos = new Vector3(newPos.x, 0, newPos.y);
         return spawnPos;
     }
 
@@ -88,15 +97,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
     }
 }
+[System.Serializable]
 public class PlayerConfiguration
 {
     public PlayerConfiguration(PlayerInput player)
     {
+        PlayerParent = player.transform;
         PlayerIndex = player.playerIndex;
         Input = player;
     }
-
+    [SerializeField]
+    public Transform PlayerParent { get; set; }
+    [SerializeField]
     public PlayerInput Input { get; set; }
+    [SerializeField]
     public int PlayerIndex { get; set; }
+    [SerializeField]
     public bool IsReady { get; set; }
 }
