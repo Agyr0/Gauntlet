@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Player : IPlayer
 {
+    public AudioClip ClassNameClip { get; }
     public GameObject PlayerPrefab { get; }
     public GameObject ProjectilePrefab { get; }
     public ClassData CurClass { get; }

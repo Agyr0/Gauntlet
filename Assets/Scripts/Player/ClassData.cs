@@ -6,6 +6,8 @@ using UnityEngine;
 public class ClassData : ScriptableObject, IPlayer
 {
     [SerializeField]
+    private AudioClip classNameClip;
+    [SerializeField]
     private GameObject playerPrefab;
     [SerializeField]
     private GameObject projectilePrefab;
@@ -37,7 +39,10 @@ public class ClassData : ScriptableObject, IPlayer
     private float magic;
 
 
-
+    public AudioClip ClassNameClip
+    {
+        get { return classNameClip; }
+    }
     public GameObject PlayerPrefab
     {
         get { return playerPrefab; }

@@ -5,6 +5,8 @@ public enum EventType
     PLAYER_JOINED,
     PLAYER_LEFT,
 
+    NARATION,
+
     LEVEL_START,
     LEVEL_OVER,
 

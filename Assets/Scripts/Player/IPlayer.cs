@@ -10,6 +10,7 @@ public enum ClassEnum
 }
 public interface IPlayer
 {
+    AudioClip ClassNameClip { get; }
     GameObject PlayerPrefab { get; }
     GameObject ProjectilePrefab { get; }
     ClassData CurClass { get; }
