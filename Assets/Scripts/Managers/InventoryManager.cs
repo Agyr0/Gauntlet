@@ -26,7 +26,6 @@ public class InventoryManager : Singleton<InventoryManager>
     public void LinkInventory(PlayerController player)
     {
         playersInventories.Add(new PlayerInventory(player));
-
     }
 
 }

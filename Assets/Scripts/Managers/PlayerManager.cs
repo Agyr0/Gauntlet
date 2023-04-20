@@ -44,8 +44,9 @@ public class PlayerManager : Singleton<PlayerManager>
             player.transform.SetParent(transform);
             playerConfigs.Add(new PlayerConfiguration(player));
         }
-
+        //Give the new player a inventory
         InventoryManager.Instance.LinkInventory(player.gameObject.GetComponent<PlayerController>());
+        //Moves player to valid spawn location
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = false;
         playerConfigs[player.playerIndex].PlayerParent.position = FindSpawnPos();
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = transform;
@@ -97,6 +98,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     }
 }
+
+
 [System.Serializable]
 public class PlayerConfiguration
 {
