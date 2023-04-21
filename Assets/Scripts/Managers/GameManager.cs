@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
-    
+
 }
 
 

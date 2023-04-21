@@ -37,6 +37,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void HandlePlayerJoin(PlayerInput player)
     {
+        //On first Player Joined send out GAME_START event
+        if (playerConfigs.Count == 0)
+            EventBus.Publish(EventType.GAME_START);
+        
+
         EventBus.Publish(EventType.PLAYER_JOINED);
         Debug.Log("Player Joined" + player.playerIndex);
         if(!playerConfigs.Any(p => p.PlayerIndex == player.playerIndex))
@@ -50,7 +55,7 @@ public class PlayerManager : Singleton<PlayerManager>
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = false;
         playerConfigs[player.playerIndex].PlayerParent.position = FindSpawnPos();
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = transform;
-
+        
     }
     public void HandlePlayerLeft(PlayerInput player)
     {

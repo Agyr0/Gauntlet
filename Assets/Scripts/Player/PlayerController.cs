@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Constant Functions
 
+    #region Constant Functions
     private void HandleMovement()
     {
         //Get grounded

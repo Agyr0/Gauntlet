@@ -1,6 +1,8 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 [CreateAssetMenu(menuName = "Class Data", fileName = "NewClassData", order = 1)]
 public class ClassData : ScriptableObject, IPlayer

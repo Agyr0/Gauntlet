@@ -502,6 +502,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCam
       objectReference: {fileID: 0}
+    - target: {fileID: 6165741272755680035, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
+      propertyPath: waitTimeForRandomClip
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
 --- !u!1001 &4913675932189286343

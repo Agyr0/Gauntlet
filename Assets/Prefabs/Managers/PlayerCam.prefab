@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
+  waitTimeForRandomClip: 20
   classList:
   - {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
   - {fileID: 11400000, guid: 32d427088ac504fbf928346613896cd8, type: 2}
@@ -208,49 +209,50 @@ MonoBehaviour:
   promptList:
   - Prompt: 1
     PromptID: 0
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: ab85465ccf8b5704ab65f0c739f4c6cb, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 2
     PromptID: 1
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: daac862d302293549ada383ec7ba77bc, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 3
     PromptID: 2
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 121e67fba00efc042ba9bf04ea846063, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 4
     PromptID: 3
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 4c07e079c2952fa42a13de95ac45dca2, type: 3}
     ToPlayer: 1
     DirectedToPlayer: {fileID: 0}
   - Prompt: 5
     PromptID: 4
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 942ae88df5196a447901ff2d95e8b2a8, type: 3}
     ToPlayer: 1
     DirectedToPlayer: {fileID: 0}
   - Prompt: 6
     PromptID: 5
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 942b0d756eb079c45b6cf6da456fab13, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 7
     PromptID: 6
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 83ea5cec938fd924aa954fed16558efb, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 8
     PromptID: 7
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 61e2e5843c08e5946b0f3a8fcf0479f5, type: 3}
     ToPlayer: 1
     DirectedToPlayer: {fileID: 0}
   - Prompt: 9
     PromptID: 8
-    MainClip: {fileID: 0}
+    MainClip: {fileID: 8300000, guid: 4118caa08bb9afb42ab83866f95dcccf, type: 3}
     ToPlayer: 1
     DirectedToPlayer: {fileID: 0}
+  randomNarationEvents: 04000000050000000800000009000000
 --- !u!82 &1662979150584223520
 AudioSource:
   m_ObjectHideFlags: 0
@@ -260,9 +262,9 @@ AudioSource:
   m_GameObject: {fileID: 7708324916636185174}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8141324928642051928, guid: c69bc8cdee46b29439785f6b4673827c, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -271,10 +273,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.1
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
