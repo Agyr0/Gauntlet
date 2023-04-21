@@ -14,15 +14,9 @@ public class ClassData : ScriptableObject, IPlayer
     [SerializeField]
     private GameObject projectilePrefab;
     [SerializeField]
-    private ClassData curClass;
-    [SerializeField]
     private ClassEnum classType;
     [SerializeField]
-    private float maxHealth;
-    [SerializeField]
     private float curHealth;
-    [SerializeField]
-    private float baseSpeed;
     [SerializeField]
     private float curSpeed;
     [SerializeField]
@@ -53,25 +47,14 @@ public class ClassData : ScriptableObject, IPlayer
     { 
         get { return projectilePrefab; }
     }
-    public ClassData CurClass
-    {
-        get { return this; }
-    }
     public ClassEnum ClassType
     {
         get { return classType; }
     }
-    public float MaxHealth
-    {
-        get { return maxHealth; }
-    }
     public float CurHealth
     {
         get { return curHealth; }
-    }
-    public float BaseSpeed
-    {
-        get { return baseSpeed; }
+        set { curHealth = value; }
     }
     public float CurSpeed
     {
@@ -84,14 +67,17 @@ public class ClassData : ScriptableObject, IPlayer
     public int Keys
     {
         get { return keys; }
+        set { keys = value; }
     }
     public int Potions
     {
         get { return potions; }
+        set { potions = value; }
     }
     public int NumItems
     {
         get { return numItems; }
+        set { numItems = value; }
     }
     public float Melee
     {

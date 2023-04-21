@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
         player = new Player(classData);
         screenBorder = new ScreenBorder();
 
-
+        StartCoroutine(ReduceHealthOverTime());
 
     }
 
@@ -108,6 +108,15 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(classData.ShootTime);
         canShoot = !canShoot;
         canMove = !canMove;
+    }
+
+    private IEnumerator ReduceHealthOverTime()
+    {
+        while (classData.CurHealth > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            classData.CurHealth--;
+        }
     }
 
     #endregion

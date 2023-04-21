@@ -5,7 +5,15 @@ using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
+    public PlayerManager playerManager;
+    public InventoryManager inventoryManager;
 
+    private void Start()
+    {
+        EventBus.Publish(EventType.ENABLE_JOINING);
+        playerManager = PlayerManager.Instance;
+        inventoryManager = InventoryManager.Instance;
+    }
 }
 
 

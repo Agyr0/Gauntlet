@@ -50,10 +50,21 @@ public class NaratorManager : Singleton<NaratorManager>
     private AudioSource audioSource;
     [SerializeField]
     private float waitTimeForRandomClip = 20f;
+    [Space(10)]
+    [Header("Player Health Prompt Values")]
+    [SerializeField]
+    private float needFoodValue = 400f;
+    [SerializeField]
+    private float lowHealthValue = 200f;
+    [SerializeField]
+    private float aboutToDieValue = 40f;
+
     private IEnumerator RandomClip;
+    private bool canPlayNameClip = true;
 
     #region Lists
     public List<ClassData> classList = new List<ClassData>();
+
     [ListElementTitle("Prompt")]
     public List<NarationPrompt> promptList = new List<NarationPrompt>();
     #endregion
@@ -107,10 +118,14 @@ public class NaratorManager : Singleton<NaratorManager>
     }
     #endregion
 
-
+    private void Update()
+    {
+        if (canPlayNameClip)
+            HandlePlayersHealthPrompt();
+    }
 
     #region Set up stuff
-   
+
 
     #region Assign Narations
     /// <summary>
@@ -184,15 +199,20 @@ public class NaratorManager : Singleton<NaratorManager>
                         audioSource.PlayOneShot( prompt.DirectedClip);
                     }
                     //Play the Prompt Clip
-                    audioSource.PlayOneShot(prompt.MainClip);
+                    StartCoroutine(WaitTillNamePlays(prompt));
                 }
             }
         }
     }
-
+    private IEnumerator WaitTillNamePlays(NarationPrompt _prompt)
+    {
+        yield return new WaitUntil(() => audioSource.isPlaying == false);
+        audioSource.PlayOneShot(_prompt.MainClip);
+    }
     #endregion
 
     #region Assign and Play Clips
+
     private void AssignAndPlayControlsAudio()
     {
         AssignNarationAndPlay(PromptType.Controls, 0);
@@ -230,13 +250,13 @@ public class NaratorManager : Singleton<NaratorManager>
     {
         AssignNarationAndPlay(PromptType.AboutToDie, 8, PlayerDirected);
     }
+   
     #endregion
 
 
     #region Handle Narator
     [SerializeField]
     private List<EventType> randomNarationEvents = new List<EventType>();
-
     private IEnumerator PlayRandomClips()
     {
         int lastIndex = 0;
@@ -250,7 +270,41 @@ public class NaratorManager : Singleton<NaratorManager>
                 EventType eventToSend = randomNarationEvents[index];
                 EventBus.Publish(eventToSend);
             }
+            yield return new WaitUntil(() => audioSource.isPlaying == false);
             yield return null;
+        }
+    }
+
+    private void HandlePlayersHealthPrompt()
+    {
+        if (PlayerManager.Instance.playerConfigs.Count > 0 && !audioSource.isPlaying)
+        {
+            for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+            {
+                PlayerController player = PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>();
+
+                if (player.classData.CurHealth < aboutToDieValue && !PlayerManager.Instance.playerConfigs[i].PlayedAboutToDie)
+                {
+                    PlayerDirected = player.classData;
+                    EventBus.Publish(EventType.N_NAME_ABOUT_TO_DIE);
+                    PlayerManager.Instance.playerConfigs[i].PlayedAboutToDie = true;
+                    break;
+                }
+                else if (player.classData.CurHealth < lowHealthValue && !PlayerManager.Instance.playerConfigs[i].PlayedLowHealth)
+                {
+                    PlayerDirected = player.classData;
+                    EventBus.Publish(EventType.N_NAME_LOW_HEALTH);
+                    PlayerManager.Instance.playerConfigs[i].PlayedLowHealth = true;
+                    break;
+                }
+                else if (player.classData.CurHealth < needFoodValue && !PlayerManager.Instance.playerConfigs[i].PlayedNeedFood)
+                {
+                    PlayerDirected = player.classData;
+                    EventBus.Publish(EventType.N_NAME_NEEDS_FOOD);
+                    PlayerManager.Instance.playerConfigs[i].PlayedNeedFood = true;
+                    break;
+                }
+            }
         }
     }
     #endregion

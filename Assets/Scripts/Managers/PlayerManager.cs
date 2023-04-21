@@ -23,7 +23,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnEnable()
     {
         playerManager = GetComponent<PlayerInputManager>();
-        playerManager.EnableJoining();
+        EventBus.Subscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
     }
 
 
@@ -33,6 +33,11 @@ public class PlayerManager : Singleton<PlayerManager>
         if(playerConfigs.Count != 0)
             camTarget.transform.position = SetAvgPosition();
         
+    }
+    private void EnablePlayerJoining()
+    {
+        playerManager.EnableJoining();
+
     }
 
     public void HandlePlayerJoin(PlayerInput player)
@@ -113,6 +118,9 @@ public class PlayerConfiguration
         PlayerParent = player.transform;
         PlayerIndex = player.playerIndex;
         Input = player;
+        PlayedAboutToDie = false;
+        PlayedLowHealth = false;
+        PlayedNeedFood = false;
     }
     [SerializeField]
     public Transform PlayerParent { get; set; }
@@ -121,5 +129,9 @@ public class PlayerConfiguration
     [SerializeField]
     public int PlayerIndex { get; set; }
     [SerializeField]
-    public bool IsReady { get; set; }
+    public bool PlayedAboutToDie { get; set; }
+    [SerializeField]
+    public bool PlayedLowHealth { get; set; }
+    [SerializeField]
+    public bool PlayedNeedFood { get; set; }
 }

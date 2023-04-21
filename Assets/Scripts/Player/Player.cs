@@ -8,16 +8,13 @@ public class Player : IPlayer
     public AudioClip ClassNameClip { get; }
     public GameObject PlayerPrefab { get; }
     public GameObject ProjectilePrefab { get; }
-    public ClassData CurClass { get; }
     public ClassEnum ClassType { get; }
-    public float MaxHealth { get; }
-    public float CurHealth { get; }
-    public float BaseSpeed { get; }
+    public float CurHealth { get; set; }
     public float CurSpeed { get; }
     public float ShootTime { get; }
-    public int Keys { get; }
-    public int Potions { get; }
-    public int NumItems { get; }
+    public int Keys { get; set; }
+    public int Potions { get; set; }
+    public int NumItems { get; set; }
     public float Melee { get; }
     public float Strength { get; }
     public float Magic { get; }

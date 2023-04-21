@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d697588819cb4e0b829f495c62576bd, type: 3}
   m_Name: WarriorData
   m_EditorClassIdentifier: 
+  classNameClip: {fileID: 8300000, guid: 8622fcf7bb8809e4699ff5bd94c09e49, type: 3}
   playerPrefab: {fileID: 0}
   projectilePrefab: {fileID: 999021191262322043, guid: 1ba6d9ba3fb53fa458e51486c6665694, type: 3}
-  curClass: {fileID: 0}
   classType: 0
-  maxHealth: 0
-  curHealth: 0
-  baseSpeed: 0
+  curHealth: 700
   curSpeed: 10
   shootTime: 0.3
   keys: 0

@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d697588819cb4e0b829f495c62576bd, type: 3}
   m_Name: WizardData
   m_EditorClassIdentifier: 
+  classNameClip: {fileID: 8300000, guid: 69de904c5fbc67a47ae6f31910907da3, type: 3}
   playerPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 0}
   curClass: {fileID: 0}
   classType: 2
   maxHealth: 0
   curHealth: 0
+  baseSpeed: 0
+  curSpeed: 0
+  shootTime: 0
   keys: 0
   potions: 0
   numItems: 0

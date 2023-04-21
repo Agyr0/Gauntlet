@@ -13,16 +13,13 @@ public interface IPlayer
     AudioClip ClassNameClip { get; }
     GameObject PlayerPrefab { get; }
     GameObject ProjectilePrefab { get; }
-    ClassData CurClass { get; }
     ClassEnum ClassType { get; }
-    float MaxHealth { get; }
-    float CurHealth { get; }
-    float BaseSpeed { get; }
+    float CurHealth { get; set; }
     float CurSpeed { get; }
     float ShootTime { get; }
-    int Keys { get; }
-    int Potions { get; }
-    int NumItems { get; }
+    int Keys { get; set; }
+    int Potions { get; set; }
+    int NumItems { get; set; }
     float Melee { get; }
     float Strength { get; }
     float Magic { get; }
