@@ -18,15 +18,15 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField]
     private int maxPlayers = 4;
 
-
+    [SerializeField]
+    private List<ClassData> possibleClasses = new List<ClassData>();
+    private List<int> usedClasses = new List<int>();
 
     private void OnEnable()
     {
         playerManager = GetComponent<PlayerInputManager>();
         EventBus.Subscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
     }
-
-
 
     private void Update()
     {
@@ -60,7 +60,21 @@ public class PlayerManager : Singleton<PlayerManager>
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = false;
         playerConfigs[player.playerIndex].PlayerParent.position = FindSpawnPos();
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<CharacterController>().enabled = transform;
-        
+        //Assign a random class index to player
+        int classIndex = Random.Range(0, possibleClasses.Count);
+        //If the random classIndex has been used already
+        if (usedClasses.Contains(classIndex))
+        {
+            //Loop till you get a new one thats available
+            while (usedClasses.Contains(classIndex))
+            {
+                classIndex = Random.Range(0, possibleClasses.Count);
+            }
+        }
+        //Assign the new player with the class at classIndex
+        playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = possibleClasses[classIndex];
+        //Add the class index to the usedClasses
+        usedClasses.Add(classIndex);
     }
     public void HandlePlayerLeft(PlayerInput player)
     {

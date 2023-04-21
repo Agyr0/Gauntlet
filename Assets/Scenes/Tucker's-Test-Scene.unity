@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571336, b: 0.3069219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -555,6 +555,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4913675932169312570, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
+      propertyPath: possibleClasses.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4913675932169312570, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
+      propertyPath: possibleClasses.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
+    - target: {fileID: 4913675932169312570, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
+      propertyPath: possibleClasses.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 466b69de9b6514d1892cfbd837d56418, type: 2}
+    - target: {fileID: 4913675932169312570, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
+      propertyPath: possibleClasses.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 32d427088ac504fbf928346613896cd8, type: 2}
+    - target: {fileID: 4913675932169312570, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
+      propertyPath: possibleClasses.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 45954585de0c243b0bccf87ea5f0b473, type: 2}
     - target: {fileID: 4913675932169312572, guid: 24cdd6493348d414986b1484efa9f610, type: 3}
       propertyPath: m_Name
       value: PlayerManager

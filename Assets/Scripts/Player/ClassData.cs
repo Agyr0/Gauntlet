@@ -91,4 +91,13 @@ public class ClassData : ScriptableObject, IPlayer
     {
         get { return magic; }
     }
+
+
+    public void ResetValuesToDefault()
+    {
+        CurHealth = 700f;
+        Keys = 0;
+        Potions = 0;
+        NumItems = 0;
+    }
 }

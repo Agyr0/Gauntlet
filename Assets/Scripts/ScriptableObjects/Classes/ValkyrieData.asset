@@ -14,14 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classNameClip: {fileID: 8300000, guid: cf635841bd222034085143fbb5b27946, type: 3}
   playerPrefab: {fileID: 0}
-  projectilePrefab: {fileID: 0}
-  curClass: {fileID: 0}
+  projectilePrefab: {fileID: 999021191262322043, guid: 1ba6d9ba3fb53fa458e51486c6665694, type: 3}
   classType: 1
-  maxHealth: 0
-  curHealth: 0
-  baseSpeed: 0
-  curSpeed: 0
-  shootTime: 0
+  curHealth: 700
+  curSpeed: 10
+  shootTime: 0.3
   keys: 0
   potions: 0
   numItems: 0

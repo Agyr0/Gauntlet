@@ -8,18 +8,26 @@ using UnityEngine.InputSystem;
 public class PlayerInventory
 {
     public PlayerController myPlayer;
+    [HideInInspector]
+    public ClassData myPlayerClass;
+    [HideInInspector]
+    public ClassEnum myPlayerClassType;
     private int maxItems = 12;
 
-    public List<GameObject> myObjects = new List<GameObject>();
+    public List<ItemData> myItems = new List<ItemData>();
 
     public PlayerInventory(PlayerController player)
     {
         myPlayer = player;
+        myPlayerClass = player.classData;
+        myPlayerClassType = myPlayerClass.ClassType;
+        myItems.Capacity = maxItems;
     }
 }
 
 public class InventoryManager : Singleton<InventoryManager>
 {
+    [ListElementTitle("myPlayerClassType")]
     public List<PlayerInventory> playersInventories = new List<PlayerInventory>();
 
 

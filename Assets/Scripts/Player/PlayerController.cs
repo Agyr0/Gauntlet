@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
         player = new Player(classData);
         screenBorder = new ScreenBorder();
 
+        if (classData.CurHealth != 700)
+            classData.CurHealth = 700;
+
         StartCoroutine(ReduceHealthOverTime());
 
     }
@@ -88,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
         //Rotate towards movement
         Vector3 lookDirection = new Vector3(playerVelocity.x, 0, playerVelocity.z);
-        if(playerVelocity != Vector3.zero)
+        if(playerVelocity != Vector3.zero && lookDirection != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
