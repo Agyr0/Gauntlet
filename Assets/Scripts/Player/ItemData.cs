@@ -15,11 +15,12 @@ public class ItemData : ScriptableObject
     public ItemEnum itemType;
     [SerializeField]
     public GameObject itemPrefab;
-    [SerializeField]
-    public float potionHealValue;
 
 
-    public ItemEnum ItemType { get; }
-    public GameObject ItemPrefab { get; }
-    public float PotionHealValue { get; set; }
+
+    public ItemEnum ItemType
+    { get { return itemType; } }
+    public GameObject ItemPrefab
+    { get { return itemPrefab; } }
+
 }

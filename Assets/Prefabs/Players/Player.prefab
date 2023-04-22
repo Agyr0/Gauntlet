@@ -68,6 +68,7 @@ MonoBehaviour:
   classData: {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
   canMove: 1
   canShoot: 1
+  canUseItem: 1
 --- !u!114 &9140873238424520457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +127,19 @@ MonoBehaviour:
     m_ActionId: ec050cfc-c2a9-43f5-b39d-f1bd03a0cb10
     m_ActionName: Player/Button1[/XInputControllerWindows/buttonSouth]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1961485798973243943}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: d9f98d85-06e3-40b1-9e66-c1c13d98c281
     m_ActionName: Player/Button2[/XInputControllerWindows/buttonEast]
   - m_PersistentCalls:
