@@ -207,4 +207,12 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.GetComponent<IFloorItem>() != null)
+        {
+            other.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+        }
+    }
 }

@@ -21,4 +21,12 @@ public class BulletController : MonoBehaviour
         if (screenBorder.IsOutside(transform, capsuleCollider.radius, capsuleCollider.radius))
             Destroy(gameObject);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.GetComponent<IFloorItem>() != null)
+        {
+            other.gameObject.GetComponent<IFloorItem>().HandleShot();
+        }
+    }
 }
