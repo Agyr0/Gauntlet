@@ -18,7 +18,7 @@ public class Player : IPlayer
     public float Melee { get; }
     public float Strength { get; }
     public float Magic { get; }
-
+    public float Score { get; set; }
 
     private readonly ClassData player;
 

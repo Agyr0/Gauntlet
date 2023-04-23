@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 10182fc192efadf4f9fcd23ae0abc7d1, type: 2}
+  - {fileID: 2100000, guid: 04a5226e507716e40acf9088489f02c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,8 +93,8 @@ GameObject:
   - component: {fileID: 999021191262322042}
   - component: {fileID: 999021191262322036}
   m_Layer: 0
-  m_Name: BulletTest
-  m_TagString: Untagged
+  m_Name: ValkyrieBullet
+  m_TagString: Bullet/Valkyrie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,4 +140,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88b571de890e2284ab0e1199aec96922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 15

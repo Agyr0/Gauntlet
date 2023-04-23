@@ -23,4 +23,5 @@ public interface IPlayer
     float Melee { get; }
     float Strength { get; }
     float Magic { get; }
+    float Score { get; set; }
 }

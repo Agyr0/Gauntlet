@@ -33,7 +33,8 @@ public class ClassData : ScriptableObject, IPlayer
     private float strength;
     [SerializeField]
     private float magic;
-
+    [SerializeField]
+    private float score;
 
     public AudioClip ClassNameClip
     {
@@ -91,7 +92,12 @@ public class ClassData : ScriptableObject, IPlayer
     {
         get { return magic; }
     }
+    public float Score
+    {
+        get { return score; }
+        set { score = value; }
 
+    }
 
     public void ResetValuesToDefault()
     {

@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodItem : MonoBehaviour, IFloorItem
+public class TreasureItem : MonoBehaviour, IFloorItem
 {
 
-    private float healthAmount = 100f;
+    private float scoreAmount = 100f;
 
 
     public void HandlePickup(PlayerController player)
     {
-        player.classData.CurHealth += healthAmount;
+        player.classData.Score += scoreAmount;
         Destroy(gameObject);
     }
 

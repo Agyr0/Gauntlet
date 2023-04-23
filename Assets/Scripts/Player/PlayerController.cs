@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.TextCore;
 
 public class PlayerController : MonoBehaviour
 {
     public ClassData classData;
+    public string myBullet;
     public IPlayer player;
     private Vector3 playerVelocity;
     private ScreenBorder screenBorder;
@@ -23,7 +24,6 @@ public class PlayerController : MonoBehaviour
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot, canUseItem = true;
-
     #region Item and Inventory Stuff
     //[HideInInspector]
     public PlayerInventory m_inventory;
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         if (classData.CurHealth != 700)
             classData.CurHealth = 700;
 
-
+        myBullet = "Bullet/" + classData.ClassType.ToString();
         StartCoroutine(ReduceHealthOverTime());
 
     }
@@ -60,11 +60,13 @@ public class PlayerController : MonoBehaviour
             HandleMovement();
         if (canShoot)
             HandleShoot();
-        if(canUseItem)
+        if (canUseItem)
             HandleItem();
+
 
         ////Debug.Log(screenBorder.IsOutside(transform, controller.radius, controller.radius));
     }
+
     private void LateUpdate()
     {
         transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
@@ -105,7 +107,7 @@ public class PlayerController : MonoBehaviour
 
         //Rotate towards movement
         Vector3 lookDirection = new Vector3(playerVelocity.x, 0, playerVelocity.z);
-        if(playerVelocity != Vector3.zero && lookDirection != Vector3.zero)
+        if (playerVelocity != Vector3.zero && lookDirection != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 
@@ -113,23 +115,36 @@ public class PlayerController : MonoBehaviour
     {
         if (hasShot)
         {
-            canShoot = !canShoot;
-            canMove = !canMove;
+            canShoot = false;
+            canMove = false;
             StartCoroutine(ShootOnce());
         }
     }
 
     private IEnumerator ShootOnce()
     {
-        GameObject bullet = Instantiate(classData.ProjectilePrefab, new Vector3( transform.position.x, transform.position.y + (controller.height / 2), transform.position.z), Quaternion.LookRotation(transform.forward));
+
+        //GameObject bullet = Instantiate(classData.ProjectilePrefab, new Vector3( transform.position.x, transform.position.y + (controller.height / 2), transform.position.z), Quaternion.LookRotation(transform.forward));
+        GameObject bullet = ObjectPooler.Instance.GetPooledObject(myBullet);
+        Debug.Log(myBullet + bullet.name);
+        if (bullet != null)
+        {
+            bullet.transform.position = new Vector3(transform.position.x, transform.position.y + (controller.height / 2), transform.position.z);
+            bullet.transform.rotation = Quaternion.LookRotation(transform.forward);
+            bullet.SetActive(true);
+        }
         yield return new WaitForSeconds(classData.ShootTime);
-        canShoot = !canShoot;
-        canMove = !canMove;
+        canMove = true;
+
+        //Wait till myBullet is off the screen before I can shoot again
+        yield return new WaitUntil(() => bullet.gameObject.activeInHierarchy == false);
+        canShoot = true;
+        yield return null;
     }
 
     private void HandleItem()
     {
-        if(usedItem)
+        if (usedItem)
         {
             usedItem = false;
             //Check which item to use
@@ -157,7 +172,7 @@ public class PlayerController : MonoBehaviour
     private void RemoveItemFromInventory(ItemEnum _item)
     {
         if (m_inventory.myItems.Count > 0)
-        { 
+        {
             for (int i = 0; i < m_inventory.myItems.Count; i++)
             {
                 //If not the right item type go to next
@@ -182,13 +197,13 @@ public class PlayerController : MonoBehaviour
         RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
         for (int i = 0; i < hits.Length; i++)
         {
-            ////Damage all enemies on screen
-            ////If potion was used do damage based on class magic value
-            //if(!isShot)
-            //    hits[i].GetComponent<Enemy>().TakeDamage(classData.Magic);
+            //Damage all enemies on screen
+            //If potion was used do damage based on class magic value
+            //if (!isShot)
+            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic);
             ////If potion was shot do less damage 
             //else if (isShot)
-            //    hits[i].GetComponent<Enemy>().TakeDamage(classData.Magic / 2);
+            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic / 2);
 
         }
     }
@@ -210,9 +225,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<IFloorItem>() != null)
+        if (other.gameObject.GetComponent<IFloorItem>() != null)
         {
             other.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+        }
+    }
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.GetComponent<IFloorItem>() != null)
+        {
+            hit.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
         }
     }
 }

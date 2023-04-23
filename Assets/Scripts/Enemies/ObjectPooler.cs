@@ -13,6 +13,7 @@ public class ObjectPoolItem
 public class ObjectPooler : Singleton<ObjectPooler>
 {
     public List<GameObject> pooledObjects;
+    [ListElementTitle("objectToPool")]
     public List<ObjectPoolItem> itemsToPool;
 
     private void Start()
