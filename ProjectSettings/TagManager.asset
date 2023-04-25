@@ -9,6 +9,7 @@ TagManager:
   - Bullet/Warrior
   - Bullet/Wizard
   - Bullet/Valkyrie
+  - ScoreCanvas
   layers:
   - Default
   - TransparentFX
