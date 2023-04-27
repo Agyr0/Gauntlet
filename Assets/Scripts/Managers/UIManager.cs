@@ -15,7 +15,15 @@ public class UIManager : Singleton<UIManager>
     public CanvasState state = CanvasState.Start;
     private List<Canvas> curCanvas = new List<Canvas>();
 
+    [Header("Level Canvas")]
     public Canvas levelCanvas;
+    [SerializeField] private GameObject title, warrior, valkyrie, wizzard, elf;
+    [Space(10)]
+    [SerializeField]
+    private Text levelText, warriorScore, warriorHealth,
+        valkyrieScore, valkyrieHealth, wizzardScore, wizzardHealth, elfScore, elfHealth;
+    [SerializeField] private GameObject warriorInventory, valkyrieInventory, wizzardInventory, elfInventory;
+
 
     private void Start()
     {

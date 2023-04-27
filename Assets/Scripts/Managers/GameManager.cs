@@ -5,14 +5,24 @@ using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
 {
+    [HideInInspector]
     public PlayerManager playerManager;
+    [HideInInspector]
     public InventoryManager inventoryManager;
+    public Transform screenCenter;
 
     private void Start()
     {
         EventBus.Publish(EventType.ENABLE_JOINING);
         playerManager = PlayerManager.Instance;
         inventoryManager = InventoryManager.Instance;
+    }
+
+    private void OnDrawGizmos()
+    {
+        ScreenBorder border = new ScreenBorder();
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(screenCenter.position, new Vector3(border.size.x, 0, border.size.y));
     }
 }
 
@@ -25,13 +35,13 @@ public class ScreenBorder
 
     //Actual width and height of the screen in world units
     public Vector2 size = new Vector2(screenBounds.x, Camera.main.orthographicSize);
-
+    Transform screenCenter = GameManager.Instance.screenCenter;
     
     //Returns true if self + object radius is outside of screen border
     public bool IsOutside(Transform self, float height, float width)
     {
-        if ((((self.position.x < (size.x * -1) + width + Camera.main.transform.position.x) || (self.position.x > (size.x) - width + Camera.main.transform.position.x) ||
-                (self.position.z < (size.y * -1) + height + Camera.main.transform.position.z) || (self.position.z > (size.y) - height + Camera.main.transform.position.z))))
+        if ((((self.position.x < (size.x * -1) + width + screenCenter.position.x) || (self.position.x > (size.x) - width + screenCenter.position.x) ||
+                (self.position.z < (size.y * -1) + height + screenCenter.position.z) || (self.position.z > (size.y) - height + screenCenter.position.z))))
             return true;
 
         return false;
@@ -42,8 +52,8 @@ public class ScreenBorder
     {
         Vector3 returnVec = self.position;
 
-        returnVec.x = Mathf.Clamp(returnVec.x, size.x * -1 + width + Camera.main.transform.position.x, size.x - width + Camera.main.transform.position.x);
-        returnVec.z = Mathf.Clamp(returnVec.z, size.y * -1 + height + Camera.main.transform.position.z, size.y - height + Camera.main.transform.position.z);
+        returnVec.x = Mathf.Clamp(returnVec.x, size.x * -1 + width + screenCenter.position.x, size.x - width + screenCenter.position.x);
+        returnVec.z = Mathf.Clamp(returnVec.z, size.y * -1 + height + screenCenter.position.z, size.y - height + screenCenter.position.z);
 
        
 

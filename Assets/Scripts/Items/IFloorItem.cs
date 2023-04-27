@@ -9,5 +9,4 @@ public interface IFloorItem
 
     void HandleShot();
 
-    IEnumerator DisplayScorePrompt();
 }

@@ -107,13 +107,14 @@ GameObject:
   - component: {fileID: 6183956702511650345}
   - component: {fileID: 6183956702511650346}
   - component: {fileID: 6183956702511650347}
+  - component: {fileID: 179482536223089225}
   m_Layer: 5
   m_Name: ScoreCanvas
   m_TagString: ScoreCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6183956702511650348
 RectTransform:
   m_ObjectHideFlags: 0
@@ -177,7 +178,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &6183956702511650347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,3 +196,15 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &179482536223089225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183956702511650349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84bd0829567a96c4db72c4c22be48bbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
