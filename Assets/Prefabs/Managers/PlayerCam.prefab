@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
-    OrthographicSize: 7
+    OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -201,6 +201,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   waitTimeForRandomClip: 30
+  needFoodValue: 400
+  lowHealthValue: 200
+  aboutToDieValue: 40
   classList:
   - {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
   - {fileID: 11400000, guid: 32d427088ac504fbf928346613896cd8, type: 2}

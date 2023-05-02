@@ -685,6 +685,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2652541851831745210, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
+      propertyPath: orthographic size
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3436581567672637732, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -703,15 +707,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4584724460916059717, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4584724460916059717, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.000004
+      value: 20.000002
       objectReference: {fileID: 0}
     - target: {fileID: 4584724460916059717, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000089773454
+      value: 0.0000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 4584724460916059717, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_LocalRotation.w
@@ -752,18 +756,6 @@ PrefabInstance:
     - target: {fileID: 4584724460916059719, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
       propertyPath: m_Name
       value: PlayerCam
-      objectReference: {fileID: 0}
-    - target: {fileID: 4584724461270504707, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
-      propertyPath: m_TrackedObjectOffset.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4584724461270504707, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
-      propertyPath: m_TrackedObjectOffset.y
-      value: 0.0000010703604
-      objectReference: {fileID: 0}
-    - target: {fileID: 4584724461270504707, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
-      propertyPath: m_TrackedObjectOffset.z
-      value: -0.0000014864509
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bac08bc14e75664e82571a9bce0c453, type: 3}
