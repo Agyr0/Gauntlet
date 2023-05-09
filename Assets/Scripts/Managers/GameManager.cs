@@ -19,13 +19,6 @@ public class GameManager : Singleton<GameManager>
         playerManager = PlayerManager.Instance;
         inventoryManager = InventoryManager.Instance;
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(new Vector3(screenCenter.position.x - (screenBorder.size.x / 2), screenCenter.position.y, screenCenter.position.z), new Vector3(screenBorder.size.x, 0, screenBorder.size.y*2));
-        
-    }
 }
 
 
@@ -53,7 +46,7 @@ public class ScreenBorder
     {
         Vector3 returnVec = self.position;
 
-        returnVec.x = Mathf.Clamp(returnVec.x, size.x * -1 + width + Camera.main.transform.position.x,Camera.main.transform.position.x + 1.5f);
+        returnVec.x = Mathf.Clamp(returnVec.x, (size.x / 1.4f) * -1 + width + Camera.main.transform.position.x,Camera.main.transform.position.x + 1.5f);
         returnVec.z = Mathf.Clamp(returnVec.z, size.y * -1 + height + Camera.main.transform.position.z, size.y - height + Camera.main.transform.position.z);
 
        
