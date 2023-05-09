@@ -11,6 +11,19 @@ public class GameManager : Singleton<GameManager>
     public InventoryManager inventoryManager;
     public Transform screenCenter;
     public ScreenBorder screenBorder;
+    private int _level = 0;
+
+    public int Level { get { return _level; } }
+
+    private void OnEnable()
+    {
+        _level = 0;
+        EventBus.Subscribe(EventType.NEXT_ROUND, IncreaseRound);
+    }
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(EventType.NEXT_ROUND, IncreaseRound);
+    }
 
     private void Start()
     {
@@ -18,7 +31,26 @@ public class GameManager : Singleton<GameManager>
         EventBus.Publish(EventType.ENABLE_JOINING);
         playerManager = PlayerManager.Instance;
         inventoryManager = InventoryManager.Instance;
+        
     }
+
+    /// <summary>
+    /// Inceases level by 1
+    /// </summary>
+    public void IncreaseRound()
+    {
+        _level++;
+        Debug.Log("Increased level");
+    }
+    /// <summary>
+    /// Increases level by <paramref name="num"/>
+    /// </summary>
+    /// <param name="num"></param>
+    public void IncreaseRound(int num)
+    {
+        _level += num;
+    }
+
 }
 
 

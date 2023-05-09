@@ -7,7 +7,6 @@ public class TreasureItem : MonoBehaviour, IFloorItem
 {
 
     private float scoreAmount = 100f;
-    [SerializeField] private float scoreWaitTime = 2f;
 
     public void HandlePickup(PlayerController player)
     {

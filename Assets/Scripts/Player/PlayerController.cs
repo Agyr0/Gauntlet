@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot, canUseItem = true;
+
+    private float tempHealth, tempScore;
+
     #region Item and Inventory Stuff
     //[HideInInspector]
     public PlayerInventory m_inventory;
@@ -50,6 +53,13 @@ public class PlayerController : MonoBehaviour
             classData.CurHealth = 700;
 
         myBullet = "Bullet/" + classData.ClassType.ToString();
+
+        classData.ResetValuesToDefault();
+
+        UIManager.Instance.HandleScoreUI(classData);
+        UIManager.Instance.HandleHealthUI(classData);
+
+
         StartCoroutine(ReduceHealthOverTime());
 
     }
@@ -218,6 +228,8 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             classData.CurHealth--;
+            UIManager.Instance.HandleHealthUI(classData);
+
         }
     }
 
@@ -225,16 +237,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<IFloorItem>() != null)
+        IFloorItem floorItem = other.gameObject.GetComponent<IFloorItem>();
+        if (floorItem != null)
         {
-            other.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+            floorItem.HandlePickup(this);
+            UIManager.Instance.HandleScoreUI(classData);
         }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.GetComponent<IFloorItem>() != null)
+        IFloorItem floorItem = hit.gameObject.GetComponent<IFloorItem>();
+        if (floorItem != null)
         {
-            hit.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+            floorItem.HandlePickup(this);
+            UIManager.Instance.HandleScoreUI(classData);
+
         }
     }
 }

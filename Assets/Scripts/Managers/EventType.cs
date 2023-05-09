@@ -25,6 +25,8 @@ public enum EventType
     LEVEL_START,
     LEVEL_OVER,
 
+    NEXT_ROUND,
+
     //Game Over
     GAME_OVER
 }

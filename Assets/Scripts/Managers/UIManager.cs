@@ -15,19 +15,34 @@ public class UIManager : Singleton<UIManager>
     public CanvasState state = CanvasState.Start;
     private List<Canvas> curCanvas = new List<Canvas>();
 
-    [Header("Level Canvas")]
     public Canvas levelCanvas;
     [SerializeField] private GameObject title, warrior, valkyrie, wizzard, elf;
-    [Space(10)]
+
     [SerializeField]
     private Text levelText, warriorScore, warriorHealth,
         valkyrieScore, valkyrieHealth, wizzardScore, wizzardHealth, elfScore, elfHealth;
     [SerializeField] private GameObject warriorInventory, valkyrieInventory, wizzardInventory, elfInventory;
 
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
+        EventBus.Subscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Subscribe(EventType.NEXT_ROUND, HandleRoundNumber);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
+        EventBus.Unsubscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Unsubscribe(EventType.NEXT_ROUND, HandleRoundNumber);
+    }
+
+
     private void Start()
     {
         curCanvas.Add(levelCanvas);
+
     }
 
 
@@ -84,5 +99,78 @@ public class UIManager : Singleton<UIManager>
                 Cursor.visible = false;
             }
         }
+    }
+
+    private void HandleRoundNumber()
+    {
+        levelText.text = "LEVEL\t" + GameManager.Instance.Level;
+    }
+
+    public void HandleScoreUI(ClassData _class)
+    {
+        switch (_class.ClassType)
+        {
+            case ClassEnum.Warrior:
+                warriorScore.text = _class.Score.ToString();
+                break;
+            case ClassEnum.Valkyrie:
+                valkyrieScore.text = _class.Score.ToString();
+                break;
+            case ClassEnum.Wizard:
+                wizzardScore.text = _class.Score.ToString();
+                break;
+            case ClassEnum.Elf:
+                elfScore.text = _class.Score.ToString();
+                break;
+            default:
+                break;
+        }
+    }
+    public void HandleHealthUI(ClassData _class)
+    {
+        switch (_class.ClassType)
+        {
+            case ClassEnum.Warrior:
+                warriorHealth.text = _class.CurHealth.ToString();
+                break;
+            case ClassEnum.Valkyrie:
+                valkyrieHealth.text = _class.CurHealth.ToString();
+                break;
+            case ClassEnum.Wizard:
+                wizzardHealth.text = _class.CurHealth.ToString();
+                break;
+            case ClassEnum.Elf:
+                elfHealth.text = _class.CurHealth.ToString();
+                break;
+            default:
+                break;
+        }
+    }
+    private void AddPlayerToUI()
+    {
+        ClassData newPlayer = PlayerManager.Instance.playerConfigs[PlayerManager.Instance.playerConfigs.Count - 1].PlayerParent.GetComponent<PlayerController>().classData;
+
+        switch (newPlayer.ClassType)
+        {
+            case ClassEnum.Warrior:
+                warrior.gameObject.SetActive(true);
+                break;
+            case ClassEnum.Valkyrie:
+                valkyrie.gameObject.SetActive(true);
+                break;
+            case ClassEnum.Wizard:
+                wizzard.gameObject.SetActive(true);
+                break;
+            case ClassEnum.Elf:
+                elf.gameObject.SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void RemovePlayerFromUI()
+    {
+
     }
 }

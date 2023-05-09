@@ -102,6 +102,7 @@ public class ClassData : ScriptableObject, IPlayer
     public void ResetValuesToDefault()
     {
         CurHealth = 700f;
+        Score = 0f;
         Keys = 0;
         Potions = 0;
         NumItems = 0;

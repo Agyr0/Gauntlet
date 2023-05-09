@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class FoodItem : MonoBehaviour, IFloorItem
 {
-
+    //private float scoreAmount = 100f;
     private float healthAmount = 100f;
 
     public void HandlePickup(PlayerController player)
     {
         player.classData.CurHealth += healthAmount;
+        //player.classData.Score += scoreAmount;
+
         GameObject scoreCanvas = ObjectPooler.Instance.GetPooledObject("ScoreCanvas");
         if (scoreCanvas != null)
         {
