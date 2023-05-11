@@ -40,13 +40,14 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        HandlePlayerGFX();
+        player = new Player(classData);
         gameManager = GameManager.Instance;
         _playerInput = GetComponent<PlayerInput>();
         _playerConfig = PlayerManager.Instance.playerConfigs[_playerInput.playerIndex];
 
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
-        player = new Player(classData);
         screenBorder = new ScreenBorder();
 
         if (classData.CurHealth != 700)
@@ -80,6 +81,12 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
+    }
+
+    private void HandlePlayerGFX()
+    {
+        GameObject gfx = Instantiate(classData.PlayerPrefab, transform.position, Quaternion.identity, transform);
+        this.gameObject.name = classData.PlayerPrefab.name;
     }
 
     #region Player Input Functions

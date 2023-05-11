@@ -14,9 +14,15 @@ public class UIManager : Singleton<UIManager>
 {
     public CanvasState state = CanvasState.Start;
     private List<Canvas> curCanvas = new List<Canvas>();
+    [SerializeField]
+    private Canvas startCanvas;
 
-    public Canvas levelCanvas;
+    [SerializeField]
+    private Canvas levelCanvas;
     [SerializeField] private GameObject title, warrior, valkyrie, wizzard, elf;
+
+    [SerializeField]
+    private Canvas pauseCanvas;
 
     [SerializeField]
     private Text levelText, warriorScore, warriorHealth,
@@ -41,8 +47,12 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
+        CursorState(false);
+        SetTimeScale(false);
+        curCanvas.Add(startCanvas);
         curCanvas.Add(levelCanvas);
-
+        curCanvas.Add(pauseCanvas);
+        Debug.Log(state);
     }
 
 
@@ -63,7 +73,29 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-
+    #region Buttons
+    public void StartGame()
+    {
+        state = CanvasState.Start;
+        SetTimeScale(true);
+        EventBus.Publish(EventType.ENABLE_JOINING);
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+        Debug.Log("Quitting Game");
+    }
+    public void PauseGame()
+    {
+        state = CanvasState.Pause;
+        SetTimeScale(false);
+    }
+    public void ResumeGame()
+    {
+        state = CanvasState.Level;
+        SetTimeScale(true);
+    }
+    #endregion
 
 
     //Function for turning off all canvases in list other than "selected"
@@ -100,7 +132,10 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
-
+    private void SetTimeScale(bool isPlaying)
+    {
+        Time.timeScale = isPlaying ? 1f : 0f;
+    }
     private void HandleRoundNumber()
     {
         levelText.text = "LEVEL\t" + GameManager.Instance.Level;

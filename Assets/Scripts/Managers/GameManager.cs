@@ -66,7 +66,7 @@ public class ScreenBorder
     //Returns true if self + object radius is outside of screen border
     public bool IsOutside(Transform self, float height, float width)
     {
-        if ((((self.position.x < (size.x * -1) + width + Camera.main.transform.position.x) || (self.position.x > (size.x) - width + Camera.main.transform.position.x) ||
+        if ((((self.position.x < (size.x / 1.4f) * -1 + width + Camera.main.transform.position.x) || (self.position.x > Camera.main.transform.position.x + 1.5f) ||
                 (self.position.z < (size.y * -1) + height + Camera.main.transform.position.z) || (self.position.z > (size.y) - height + Camera.main.transform.position.z))))
             return true;
 

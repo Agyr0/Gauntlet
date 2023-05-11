@@ -10,6 +10,10 @@ public class UIManagerEditor : Editor
 
     SerializedProperty state;
 
+    SerializedProperty startCanvas;     //
+
+    SerializedProperty pauseCanvas;     //
+
     SerializedProperty levelCanvas;
     SerializedProperty title;
     SerializedProperty levelText;
@@ -36,11 +40,15 @@ public class UIManagerEditor : Editor
 
     #endregion
 
-    bool levelGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup = false;
+    bool  levelGroup, startGroup, pauseGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup = false;      //
 
     private void OnEnable()
     {
         state = serializedObject.FindProperty("state");
+
+        startCanvas = serializedObject.FindProperty("startCanvas");     //
+
+        pauseCanvas = serializedObject.FindProperty("pauseCanvas");     //
 
         levelCanvas = serializedObject.FindProperty("levelCanvas");
         title = serializedObject.FindProperty("title");
@@ -74,6 +82,35 @@ public class UIManagerEditor : Editor
         EditorGUI.indentLevel++;
         EditorGUILayout.Space(10);
         EditorGUILayout.PropertyField(state);
+        EditorGUILayout.Space(10);
+        EditorGUI.indentLevel--;
+
+        #region Start
+        startGroup = EditorGUILayout.BeginFoldoutHeaderGroup(startGroup, "Start Canvas");       //
+        if (startGroup)
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.PropertyField(startCanvas);
+            EditorGUILayout.Space(10);
+
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        #endregion
+
+        EditorGUILayout.Space(10);
+
+        #region Pause
+        pauseGroup = EditorGUILayout.BeginFoldoutHeaderGroup(pauseGroup, "Pause Canvas");       //
+        if (pauseGroup)
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.PropertyField(pauseCanvas);
+            EditorGUILayout.Space(10);
+
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        #endregion
+
         EditorGUILayout.Space(10);
 
         #region Level
