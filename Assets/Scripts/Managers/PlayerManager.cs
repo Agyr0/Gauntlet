@@ -157,5 +157,6 @@ public class PlayerConfiguration
     public bool PlayedLowHealth { get; set; }
     [SerializeField]
     public bool PlayedNeedFood { get; set; }
+    
 
 }

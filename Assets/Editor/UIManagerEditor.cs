@@ -9,10 +9,16 @@ public class UIManagerEditor : Editor
     #region Variables
 
     SerializedProperty state;
+    SerializedProperty _eventSystem;
 
-    SerializedProperty startCanvas;     //
+    SerializedProperty startCanvas;     
+    SerializedProperty startFirstSelectedButton;
 
-    SerializedProperty pauseCanvas;     //
+    SerializedProperty pauseCanvas;     
+    SerializedProperty pauseFirstSelectedButton;
+
+    SerializedProperty gameOverCanvas;
+    SerializedProperty gameOverFirstSelectedButton;
 
     SerializedProperty levelCanvas;
     SerializedProperty title;
@@ -38,17 +44,24 @@ public class UIManagerEditor : Editor
     SerializedProperty elfScore;
     SerializedProperty elfInventory;
 
+
     #endregion
 
-    bool  levelGroup, startGroup, pauseGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup = false;      //
+    bool  levelGroup, startGroup, pauseGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup, gameOverGroup = false;      
 
     private void OnEnable()
     {
         state = serializedObject.FindProperty("state");
+        _eventSystem = serializedObject.FindProperty("_eventSystem");
 
-        startCanvas = serializedObject.FindProperty("startCanvas");     //
+        startCanvas = serializedObject.FindProperty("startCanvas");     
+        startFirstSelectedButton = serializedObject.FindProperty("startFirstSelectedButton");     
 
-        pauseCanvas = serializedObject.FindProperty("pauseCanvas");     //
+        pauseCanvas = serializedObject.FindProperty("pauseCanvas");     
+        pauseFirstSelectedButton = serializedObject.FindProperty("pauseFirstSelectedButton");     
+
+        gameOverCanvas = serializedObject.FindProperty("gameOverCanvas");
+        gameOverFirstSelectedButton = serializedObject.FindProperty("gameOverFirstSelectedButton");
 
         levelCanvas = serializedObject.FindProperty("levelCanvas");
         title = serializedObject.FindProperty("title");
@@ -82,15 +95,17 @@ public class UIManagerEditor : Editor
         EditorGUI.indentLevel++;
         EditorGUILayout.Space(10);
         EditorGUILayout.PropertyField(state);
+        EditorGUILayout.PropertyField(_eventSystem);
         EditorGUILayout.Space(10);
         EditorGUI.indentLevel--;
 
         #region Start
-        startGroup = EditorGUILayout.BeginFoldoutHeaderGroup(startGroup, "Start Canvas");       //
+        startGroup = EditorGUILayout.BeginFoldoutHeaderGroup(startGroup, "Start Canvas");       
         if (startGroup)
         {
             EditorGUILayout.Space(10);
             EditorGUILayout.PropertyField(startCanvas);
+            EditorGUILayout.PropertyField(startFirstSelectedButton);
             EditorGUILayout.Space(10);
 
         }
@@ -100,11 +115,27 @@ public class UIManagerEditor : Editor
         EditorGUILayout.Space(10);
 
         #region Pause
-        pauseGroup = EditorGUILayout.BeginFoldoutHeaderGroup(pauseGroup, "Pause Canvas");       //
+        pauseGroup = EditorGUILayout.BeginFoldoutHeaderGroup(pauseGroup, "Pause Canvas");       
         if (pauseGroup)
         {
             EditorGUILayout.Space(10);
             EditorGUILayout.PropertyField(pauseCanvas);
+            EditorGUILayout.PropertyField(pauseFirstSelectedButton);
+            EditorGUILayout.Space(10);
+
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        #endregion
+
+        EditorGUILayout.Space(10);
+
+        #region Game Over
+        gameOverGroup = EditorGUILayout.BeginFoldoutHeaderGroup(gameOverGroup, "Game Over Canvas");       
+        if (gameOverGroup)
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.PropertyField(gameOverCanvas);
+            EditorGUILayout.PropertyField(gameOverFirstSelectedButton);
             EditorGUILayout.Space(10);
 
         }
@@ -194,6 +225,8 @@ public class UIManagerEditor : Editor
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
         #endregion
+
+        serializedObject.ApplyModifiedProperties();
 
     }
 }

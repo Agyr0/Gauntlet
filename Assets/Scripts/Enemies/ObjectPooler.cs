@@ -24,7 +24,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
         {
             for(short c = 0; c < item.amountToPool; c++)
             {
-                GameObject obj = (GameObject)Instantiate(item.objectToPool);
+                GameObject obj = (GameObject)Instantiate(item.objectToPool, this.transform);
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
             }
@@ -45,7 +45,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
         {
             if(item.shouldExpand)
             {
-                GameObject obj = (GameObject)Instantiate(item.objectToPool);
+                GameObject obj = (GameObject)Instantiate(item.objectToPool, this.transform);
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
                 return obj;

@@ -46,8 +46,8 @@ public class NarationPrompt
 public class NaratorManager : Singleton<NaratorManager>
 {
     #region Variables
-    [SerializeField, HideInInspector]
-    private AudioSource audioSource;
+    [HideInInspector]
+    public AudioSource audioSource;
     [SerializeField]
     private float waitTimeForRandomClip = 20f;
     [Space(10)]
@@ -196,7 +196,8 @@ public class NaratorManager : Singleton<NaratorManager>
                         //Assign the Class that the prompt is directed to
                         prompt.DirectedToPlayer = PlayerDirected;
                         //Play the Class Name Clip
-                        audioSource.PlayOneShot( prompt.DirectedClip);
+                        audioSource.clip =  prompt.DirectedClip;
+                        audioSource.Play();
                     }
                     //Play the Prompt Clip
                     StartCoroutine(WaitTillNamePlays(prompt));
@@ -207,7 +208,8 @@ public class NaratorManager : Singleton<NaratorManager>
     private IEnumerator WaitTillNamePlays(NarationPrompt _prompt)
     {
         yield return new WaitUntil(() => audioSource.isPlaying == false);
-        audioSource.PlayOneShot(_prompt.MainClip);
+        audioSource.clip = _prompt.MainClip;
+        audioSource.Play();
     }
     #endregion
 

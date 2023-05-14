@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: KeyData
   m_EditorClassIdentifier: 
   itemType: 0
+  itemPrefab: {fileID: 6052639990514833732, guid: f3bf5bdea6447dd4cb9fdff62170f74a, type: 3}
+  uiPrefab: {fileID: 4472687347309872201, guid: 378691730684d03439fa7afb5634e230, type: 3}

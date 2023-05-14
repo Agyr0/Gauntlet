@@ -28,7 +28,6 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         screenBorder = new ScreenBorder();
-        EventBus.Publish(EventType.ENABLE_JOINING);
         playerManager = PlayerManager.Instance;
         inventoryManager = InventoryManager.Instance;
         
@@ -40,6 +39,7 @@ public class GameManager : Singleton<GameManager>
     public void IncreaseRound()
     {
         _level++;
+        EventBus.Publish(EventType.LEVEL_CHANGED);
         Debug.Log("Increased level");
     }
     /// <summary>
@@ -49,8 +49,25 @@ public class GameManager : Singleton<GameManager>
     public void IncreaseRound(int num)
     {
         _level += num;
+        EventBus.Publish(EventType.LEVEL_CHANGED);
     }
 
+    public void UsePotion(bool isShot)
+    {
+        Debug.Log("Used potion and wasShot: " + isShot);
+        RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //Damage all enemies on screen
+            //If potion was used do damage based on class magic value
+            //if (!isShot)
+            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic);
+            ////If potion was shot do less damage 
+            //else if (isShot)
+            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic / 2);
+
+        }
+    }
 }
 
 

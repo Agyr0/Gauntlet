@@ -147,13 +147,49 @@ MonoBehaviour:
     m_ActionId: d9f98d85-06e3-40b1-9e66-c1c13d98c281
     m_ActionName: Player/Button2[/XInputControllerWindows/buttonEast]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1961485798973243943}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ee6c6c05-cf15-4c16-8c0c-d77d9de69ae7
     m_ActionName: Player/Pause[/XInputControllerWindows/select]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 5c44891d-0b7e-4a8b-a12e-fda0e73dd4bd
     m_ActionName: Player/Join[/XInputControllerWindows/start,/Keyboard/anyKey]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1961485798973243943}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4864e73a-2ff8-4d66-b399-e65f169afc39
+    m_ActionName: UI/Pause[/XInputControllerWindows/select,/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cd4d9200-d150-4895-ae00-39c59402a6cd
+    m_ActionName: UI/Button1[/XInputControllerWindows/buttonSouth,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 84431f62-c203-450b-a986-9e7d6f02a5b3
+    m_ActionName: UI/Join[/XInputControllerWindows/start,/Keyboard/anyKey]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player

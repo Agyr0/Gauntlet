@@ -1,5 +1,8 @@
 public enum EventType
 {
+    UI_CHANGED,
+    LEVEL_CHANGED,
+
     //Game Start
     GAME_START,
 
@@ -20,6 +23,16 @@ public enum EventType
     N_NAME_LOW_HEALTH,
     N_NAME_ABOUT_TO_DIE,
 
+    //Inventory
+    WARRIOR_ADD_ITEM,
+    VALKYRIE_ADD_ITEM,
+    WIZZARD_ADD_ITEM,
+    ELF_ADD_ITEM,
+
+    WARRIOR_REMOVE_ITEM,
+    VALKYRIE_REMOVE_ITEM,
+    WIZZARD_REMOVE_ITEM,
+    ELF_REMOVE_ITEM,
 
     //Level Start/Stop
     LEVEL_START,

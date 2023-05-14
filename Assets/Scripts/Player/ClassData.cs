@@ -36,6 +36,9 @@ public class ClassData : ScriptableObject, IPlayer
     [SerializeField]
     private float score;
 
+    [SerializeField, HideInInspector]
+    private GameObject myUIInventory;
+
     public AudioClip ClassNameClip
     {
         get { return classNameClip; }
@@ -97,6 +100,12 @@ public class ClassData : ScriptableObject, IPlayer
         get { return score; }
         set { score = value; }
 
+    }
+
+    public GameObject MyUIInventory
+    {
+        get { return myUIInventory; }
+        set { myUIInventory = value; }
     }
 
     public void ResetValuesToDefault()
