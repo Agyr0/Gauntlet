@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : Enemy
 {
     [SerializeField] private float spawnDelay;
     //The ordinal directions around the EnemySpawner
@@ -28,5 +28,33 @@ public class EnemySpawner : MonoBehaviour
         }
 
         StartCoroutine(Spawn());
+    }
+
+    protected override void findTargetPlayer()
+    {
+        int playerCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, playerColliders, playerMask);
+
+        for (short c = 0; c < playerCount; c++)
+        {
+            Player currentPlayer = playerColliders[c].gameObject.GetComponent<Player>();
+            switch (currentPlayer.ClassType)
+            {
+                case ClassEnum.Warrior:
+                    warrior = currentPlayer;
+                    break;
+                case ClassEnum.Valkyrie:
+                    valkyrie = currentPlayer;
+                    break;
+                case ClassEnum.Wizard:
+                    wizard = currentPlayer;
+                    break;
+                case ClassEnum.Elf:
+                    elf = currentPlayer;
+                    break;
+                default:
+                    Debug.Log("Class Sort Defauted in Enemy.cs");
+                    break;
+            }
+        }
     }
 }
