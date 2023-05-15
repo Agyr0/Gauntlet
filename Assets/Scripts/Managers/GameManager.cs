@@ -68,6 +68,11 @@ public class GameManager : Singleton<GameManager>
 
         }
     }
+
+    public void ResetGame()
+    {
+        Debug.Log("Resetting game");
+    }
 }
 
 

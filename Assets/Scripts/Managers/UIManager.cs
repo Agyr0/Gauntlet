@@ -163,6 +163,7 @@ public class UIManager : Singleton<UIManager>
     public void Menu()
     {
         state = CanvasState.Start;
+        GameManager.Instance.ResetGame();
         EventBus.Publish(EventType.UI_CHANGED);
 
     }
