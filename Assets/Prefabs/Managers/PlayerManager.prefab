@@ -75,10 +75,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32440668561ef4bd8bea5a29c759798f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerManager: {fileID: 0}
   playerConfigs: []
   camTarget: {fileID: 4913675931963018657}
   spawnRadius: 3
   maxPlayers: 4
+  possibleClasses:
+  - {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
+  - {fileID: 11400000, guid: 466b69de9b6514d1892cfbd837d56418, type: 2}
+  - {fileID: 11400000, guid: 32d427088ac504fbf928346613896cd8, type: 2}
+  - {fileID: 11400000, guid: 45954585de0c243b0bccf87ea5f0b473, type: 2}
 --- !u!114 &4913675932169312571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 2
   m_MaxPlayerCount: 4
-  m_AllowJoining: 1
+  m_AllowJoining: 0
   m_JoinBehavior: 1
   m_PlayerJoinedEvent:
     m_PersistentCalls:
@@ -137,7 +143,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: -3314374045561554194, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
-  m_PlayerPrefab: {fileID: 1961485798973243946, guid: 2cf3fb6c0ab748a43b9fc21a9bf06801, type: 3}
+  m_PlayerPrefab: {fileID: 1961485798973243946, guid: c8c73cbe10355794eb0208ab8a44840f, type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1

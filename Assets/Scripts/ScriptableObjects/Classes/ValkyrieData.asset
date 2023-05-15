@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ValkyrieData
   m_EditorClassIdentifier: 
   classNameClip: {fileID: 8300000, guid: cf635841bd222034085143fbb5b27946, type: 3}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 6703871650688292901, guid: 455a54995c5dcd040b294fd678725ccb, type: 3}
   projectilePrefab: {fileID: 999021191262322043, guid: 69da6e9cedb23d74bab81566dc8fc376, type: 3}
   classType: 1
-  curHealth: 700
+  curHealth: 697
   curSpeed: 10
   shootTime: 0.3
   keys: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   melee: 0
   strength: 0
   magic: 0
+  score: 0

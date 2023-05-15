@@ -9,7 +9,8 @@ using UnityEngine.InputSystem;
 public class PlayerManager : Singleton<PlayerManager>
 {
     [Header("Info")]
-    private PlayerInputManager playerManager;
+    [HideInInspector]
+    public PlayerInputManager playerManager;
     public List<PlayerConfiguration> playerConfigs = new List<PlayerConfiguration>();
     [SerializeField] private GameObject camTarget;
 
@@ -44,16 +45,20 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         //On first Player Joined send out GAME_START event
         if (playerConfigs.Count == 0)
+        {
             EventBus.Publish(EventType.GAME_START);
+            EventBus.Publish(EventType.NEXT_ROUND);
+        }
+       // Debug.Log(player.gameObject.GetComponent<PlayerController>().classData.PlayerPrefab);
         
-
-        EventBus.Publish(EventType.PLAYER_JOINED);
         Debug.Log("Player Joined" + player.playerIndex);
         if(!playerConfigs.Any(p => p.PlayerIndex == player.playerIndex))
         {
             player.transform.SetParent(transform);
             playerConfigs.Add(new PlayerConfiguration(player));
         }
+        //Assign prefab to spawn
+        //playerManager.playerPrefab = playerConfigs[player.playerIndex].PlayerClass.PlayerPrefab;
         //Give the new player a inventory
         InventoryManager.Instance.LinkInventory(player.gameObject.GetComponent<PlayerController>());
         //Moves player to valid spawn location
@@ -75,6 +80,7 @@ public class PlayerManager : Singleton<PlayerManager>
         playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = possibleClasses[classIndex];
         //Add the class index to the usedClasses
         usedClasses.Add(classIndex);
+        EventBus.Publish(EventType.PLAYER_JOINED);
     }
     public void HandlePlayerLeft(PlayerInput player)
     {
@@ -129,6 +135,7 @@ public class PlayerConfiguration
 {
     public PlayerConfiguration(PlayerInput player)
     {
+        PlayerClass = player.gameObject.GetComponent<PlayerController>().classData;
         PlayerParent = player.transform;
         PlayerIndex = player.playerIndex;
         Input = player;
@@ -136,6 +143,8 @@ public class PlayerConfiguration
         PlayedLowHealth = false;
         PlayedNeedFood = false;
     }
+    [SerializeField]
+    public ClassData PlayerClass { get; set; }
     [SerializeField]
     public Transform PlayerParent { get; set; }
     [SerializeField]
@@ -148,4 +157,6 @@ public class PlayerConfiguration
     public bool PlayedLowHealth { get; set; }
     [SerializeField]
     public bool PlayedNeedFood { get; set; }
+    
+
 }

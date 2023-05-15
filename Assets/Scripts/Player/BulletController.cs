@@ -30,4 +30,12 @@ public class BulletController : MonoBehaviour
             other.gameObject.GetComponent<IFloorItem>().HandleShot();
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<IFloorItem>() != null)
+        {
+            collision.gameObject.GetComponent<IFloorItem>().HandleShot();
+        }
+    }
 }

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: PotionData
   m_EditorClassIdentifier: 
   itemType: 1
-  potionHealValue: 100
+  itemPrefab: {fileID: 6927922664530173876, guid: a4f1c5e6a32a81a46a0f6202181294cf, type: 3}
+  uiPrefab: {fileID: 8049019247614817645, guid: dbf8f38856b79ee45acb36da2fe98d41, type: 3}

@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     private Transform mainCamTransform;
     private Coroutine shootCorutine;
     public bool canMove, canShoot, canUseItem = true;
+
+    private float tempHealth, tempScore;
+
     #region Item and Inventory Stuff
     //[HideInInspector]
     public PlayerInventory m_inventory;
@@ -37,19 +40,47 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        HandlePlayerGFX();
+        player = new Player(classData);
         gameManager = GameManager.Instance;
         _playerInput = GetComponent<PlayerInput>();
         _playerConfig = PlayerManager.Instance.playerConfigs[_playerInput.playerIndex];
 
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
-        player = new Player(classData);
         screenBorder = new ScreenBorder();
 
         if (classData.CurHealth != 700)
             classData.CurHealth = 700;
 
         myBullet = "Bullet/" + classData.ClassType.ToString();
+
+        classData.ResetValuesToDefault();
+
+        UIManager.Instance.HandleScoreUI(classData);
+        UIManager.Instance.HandleHealthUI(classData);
+
+        switch (classData.ClassType)
+        {
+            case ClassEnum.Warrior:
+                classData.MyUIInventory = UIManager.Instance.warriorInventory;
+                break;
+            case ClassEnum.Valkyrie:
+                classData.MyUIInventory = UIManager.Instance.valkyrieInventory;
+
+                break;
+            case ClassEnum.Wizard:
+                classData.MyUIInventory = UIManager.Instance.wizzardInventory;
+
+                break;
+            case ClassEnum.Elf:
+                classData.MyUIInventory = UIManager.Instance.elfInventory;
+
+                break;
+            default:
+                break;
+        }
+
         StartCoroutine(ReduceHealthOverTime());
 
     }
@@ -72,6 +103,12 @@ public class PlayerController : MonoBehaviour
         transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
     }
 
+    private void HandlePlayerGFX()
+    {
+        GameObject gfx = Instantiate(classData.PlayerPrefab, transform.position, Quaternion.identity, transform);
+        this.gameObject.name = classData.PlayerPrefab.name;
+    }
+
     #region Player Input Functions
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -86,8 +123,41 @@ public class PlayerController : MonoBehaviour
         usedItem = context.action.triggered;
     }
 
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        UIManager.Instance.isPaused = !UIManager.Instance.isPaused;
+
+        UIManager.Instance.state = UIManager.Instance.isPaused ? CanvasState.Pause : CanvasState.Level;
+        EventBus.Publish(EventType.UI_CHANGED);
+
+        if(UIManager.Instance.isPaused)
+            NaratorManager.Instance.audioSource.Pause();
+        else
+            NaratorManager.Instance.audioSource.UnPause();
+
+    }
+
+    /// <summary>
+    /// Sets players <paramref name="canMove"/>,<paramref name="canShoot"/> and, <paramref name="canUseItem"/> to <paramref name="allowInput"/>
+    /// </summary>
+    /// <param name="allowInput"></param>
+    public void AllowInput(bool allowInput)
+    {
+        canMove= allowInput;
+        canShoot= allowInput;
+        canUseItem= allowInput;
+    }
+
     #endregion
 
+
+    public void HandleMyInventory(GameObject inventoryGrp, GameObject _item)
+    {
+        if(m_inventory.myItems.Count != inventoryGrp.transform.childCount)
+        {
+            GameObject item = ObjectPooler.Instance.GetPooledObject(_item.tag);
+        }
+    }
 
     #region Constant Functions
     private void HandleMovement()
@@ -132,6 +202,8 @@ public class PlayerController : MonoBehaviour
             bullet.transform.position = new Vector3(transform.position.x, transform.position.y + (controller.height / 2), transform.position.z);
             bullet.transform.rotation = Quaternion.LookRotation(transform.forward);
             bullet.SetActive(true);
+
+
         }
         yield return new WaitForSeconds(classData.ShootTime);
         canMove = true;
@@ -151,18 +223,50 @@ public class PlayerController : MonoBehaviour
             switch (itemToUse)
             {
                 case ItemEnum.Potion:
-                    //Use potion
-                    UsePotion(false);
+                    bool hasPotions = m_inventory.myItems.Any(item => item.ItemType == ItemEnum.Potion);
+                    if (hasPotions)
+                    {
+                        //Use potion
+                        GameManager.Instance.UsePotion(false);
 
-                    //Remove from inventory
-                    RemoveItemFromInventory(itemToUse);
+                        //Remove from inventory
+                        GameObject potion = null;
+                        for (int i = 0; i < classData.MyUIInventory.transform.childCount; i++)
+                        {
+                            Transform child = classData.MyUIInventory.transform.GetChild(i);
+                            if (child.gameObject.name == "PotionIcon(Clone)")
+                            {
+                                potion = child.gameObject;
+                            }
+                        }
+                        potion.SetActive(false);
+                        potion.transform.SetParent(ObjectPooler.Instance.transform);
+                        RemoveItemFromInventory(itemToUse);
+                    }
+
                     break;
                 case ItemEnum.Key:
-                    //Use key
-                    UseKey();
+                    bool hasKeys = m_inventory.myItems.Any(item => item.ItemType == ItemEnum.Key);
+                    if (hasKeys)
+                    {
+                        //Use key
+                        UseKey();
 
-                    //Remove from inventory
-                    RemoveItemFromInventory(itemToUse);
+                        //Remove from inventory
+                        GameObject key = null;
+                        for (int i = 0; i < classData.MyUIInventory.transform.childCount; i++)
+                        {
+                            Transform child = classData.MyUIInventory.transform.GetChild(i);
+                            if (child.gameObject.name == "KeyIcon(Clone)")
+                            {
+                                key = child.gameObject;
+                            }
+                        }
+                        key.SetActive(false);
+                        key.transform.SetParent(ObjectPooler.Instance.transform);
+                        RemoveItemFromInventory(itemToUse);
+                        //InventoryManager.Instance.RemoveItemFromInventory(this, key.GetComponent<KeyItem>().data);
+                    }
                     break;
                 default:
                     break;
@@ -181,8 +285,10 @@ public class PlayerController : MonoBehaviour
                 //If is right item type
                 else if (m_inventory.myItems[i].ItemType == _item)
                 {
+                    
                     //Remove it from my inventory
                     m_inventory.myItems.RemoveAt(i);
+                    m_inventory.uiItems.RemoveAt(i);
                     Debug.Log("Removed Potion from inventory");
                     return;
 
@@ -191,22 +297,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UsePotion(bool isShot)
-    {
-        Debug.Log("Used potion and wasShot: " + isShot);
-        RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
-        for (int i = 0; i < hits.Length; i++)
-        {
-            //Damage all enemies on screen
-            //If potion was used do damage based on class magic value
-            //if (!isShot)
-            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic);
-            ////If potion was shot do less damage 
-            //else if (isShot)
-            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic / 2);
-
-        }
-    }
+    
     private void UseKey()
     {
 
@@ -218,6 +309,8 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             classData.CurHealth--;
+            UIManager.Instance.HandleHealthUI(classData);
+
         }
     }
 
@@ -225,16 +318,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<IFloorItem>() != null)
+        IFloorItem floorItem = other.gameObject.GetComponent<IFloorItem>();
+        if (floorItem != null)
         {
-            other.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+            floorItem.HandlePickup(this);
+            UIManager.Instance.HandleScoreUI(classData);
         }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.GetComponent<IFloorItem>() != null)
+        IFloorItem floorItem = hit.gameObject.GetComponent<IFloorItem>();
+        if (floorItem != null)
         {
-            hit.gameObject.GetComponent<IFloorItem>().HandlePickup(this);
+            floorItem.HandlePickup(this);
+            UIManager.Instance.HandleScoreUI(classData);
+
         }
     }
 }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: WizardData
   m_EditorClassIdentifier: 
   classNameClip: {fileID: 8300000, guid: 69de904c5fbc67a47ae6f31910907da3, type: 3}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 2925876725778937395, guid: 004bfe95be47beb41b53ed24ce9a658f, type: 3}
   projectilePrefab: {fileID: 999021191262322043, guid: 6922ef5ea9789ec4094c14888a41e43e, type: 3}
   classType: 2
-  curHealth: 700
+  curHealth: 694
   curSpeed: 10
   shootTime: 0.3
   keys: 0
@@ -25,3 +25,4 @@ MonoBehaviour:
   melee: 0
   strength: 0
   magic: 0
+  score: 0

@@ -15,6 +15,8 @@ public class ItemData : ScriptableObject
     public ItemEnum itemType;
     [SerializeField]
     public GameObject itemPrefab;
+    [SerializeField]
+    public GameObject uiPrefab;
 
 
 
@@ -22,5 +24,6 @@ public class ItemData : ScriptableObject
     { get { return itemType; } }
     public GameObject ItemPrefab
     { get { return itemPrefab; } }
-
+    public GameObject UIPrefab
+    { get { return uiPrefab; } }
 }
