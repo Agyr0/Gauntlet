@@ -201,6 +201,7 @@ public class PlayerController : MonoBehaviour
         {
             bullet.transform.position = new Vector3(transform.position.x, transform.position.y + (controller.height / 2), transform.position.z);
             bullet.transform.rotation = Quaternion.LookRotation(transform.forward);
+            bullet.GetComponent<BulletController>().m_player = this;
             bullet.SetActive(true);
 
 
@@ -227,7 +228,7 @@ public class PlayerController : MonoBehaviour
                     if (hasPotions)
                     {
                         //Use potion
-                        GameManager.Instance.UsePotion(false);
+                        GameManager.Instance.UsePotion(false, this);
 
                         //Remove from inventory
                         GameObject potion = null;

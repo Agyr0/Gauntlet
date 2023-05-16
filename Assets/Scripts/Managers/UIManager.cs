@@ -10,7 +10,8 @@ public enum CanvasState
     Start,
     Level,
     GameOver,
-    Pause
+    Pause,
+    Credits
 };
 public class UIManager : Singleton<UIManager>
 {
@@ -40,11 +41,15 @@ public class UIManager : Singleton<UIManager>
     private Canvas gameOverCanvas;
     [SerializeField] private GameObject gameOverFirstSelectedButton;
 
+    [SerializeField]
+    private Canvas creditsCanvas;
+    [SerializeField] private GameObject creditsFirstSelectedButton;
+
 
     private void OnEnable()
     {
         EventBus.Subscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
-        EventBus.Subscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Subscribe(EventType.PLAYER_LEFT, RefreshPlayerUIActiveState);
         EventBus.Subscribe(EventType.LEVEL_CHANGED, HandleRoundNumber);
         EventBus.Subscribe(EventType.UI_CHANGED, HandleCanvasState);
 
@@ -54,7 +59,7 @@ public class UIManager : Singleton<UIManager>
     private void OnDisable()
     {
         EventBus.Unsubscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
-        EventBus.Unsubscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Unsubscribe(EventType.PLAYER_LEFT, RefreshPlayerUIActiveState);
         EventBus.Unsubscribe(EventType.LEVEL_CHANGED, HandleRoundNumber);
         EventBus.Unsubscribe(EventType.UI_CHANGED, HandleCanvasState);
 
@@ -69,6 +74,7 @@ public class UIManager : Singleton<UIManager>
         curCanvas.Add(levelCanvas);
         curCanvas.Add(pauseCanvas);
         curCanvas.Add(gameOverCanvas);
+        curCanvas.Add(creditsCanvas);
         EventBus.Publish(EventType.UI_CHANGED);
 
     }
@@ -91,7 +97,10 @@ public class UIManager : Singleton<UIManager>
             case CanvasState.Pause:
                 DisplayPausedCanvas();
                 break;
-        
+            case CanvasState.Credits:
+                DisplayCreditsCanvas();
+                break;
+
         }
     }
 
@@ -139,6 +148,17 @@ public class UIManager : Singleton<UIManager>
         SetTimeScale(false);
         CursorState(false);
     }
+    private void DisplayCreditsCanvas()
+    {
+        DisableOtherCanvas(creditsCanvas);
+        for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+        {
+            PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
+        }
+        _eventSystem.SetSelectedGameObject(creditsFirstSelectedButton);
+        SetTimeScale(false);
+        CursorState(false);
+    }
 
     #endregion
 
@@ -148,6 +168,7 @@ public class UIManager : Singleton<UIManager>
         state = CanvasState.Level;
         EventBus.Publish(EventType.UI_CHANGED);        
         EventBus.Publish(EventType.ENABLE_JOINING);
+        EventBus.Publish(EventType.LEVEL_CHANGED);
     }
     public void ExitGame()
     {
@@ -160,12 +181,24 @@ public class UIManager : Singleton<UIManager>
         state = CanvasState.Level;
         EventBus.Publish(EventType.UI_CHANGED);
     }
+    public void Credits()
+    {
+        state = CanvasState.Credits;
+        EventBus.Publish(EventType.UI_CHANGED);
+    }
     public void Menu()
     {
         state = CanvasState.Start;
         GameManager.Instance.ResetGame();
         EventBus.Publish(EventType.UI_CHANGED);
 
+    }
+
+    public void PlayerLeave()
+    {
+        EventBus.Publish(EventType.PLAYER_LEFT);
+        BaseInputModule currentInputModule = EventSystem.current.currentInputModule;
+        Debug.LogWarning(InputSystem.GetDevice(currentInputModule.name));
     }
     #endregion
 
@@ -306,8 +339,34 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private void RemovePlayerFromUI()
+    private void RefreshPlayerUIActiveState()
     {
+        warrior.gameObject.SetActive(false);
+        valkyrie.gameObject.SetActive(false);
+        wizzard.gameObject.SetActive(false);
+        elf.gameObject.SetActive(false);
 
+        for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+        {
+            ClassData player = PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().classData;
+
+            switch (player.ClassType)
+            {
+                case ClassEnum.Warrior:
+                    warrior.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Valkyrie:
+                    valkyrie.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Wizard:
+                    wizzard.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Elf:
+                    elf.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

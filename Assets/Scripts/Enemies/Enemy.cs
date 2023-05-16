@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
         //Will call a script in ___ to give the player "points"
     }
 
-    protected void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         health -= damage;
     }

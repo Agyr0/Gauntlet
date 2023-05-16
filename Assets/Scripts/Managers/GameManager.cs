@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
-        _level = 0;
+        _level = 1;
         EventBus.Subscribe(EventType.NEXT_ROUND, IncreaseRound);
     }
     private void OnDisable()
@@ -52,7 +52,7 @@ public class GameManager : Singleton<GameManager>
         EventBus.Publish(EventType.LEVEL_CHANGED);
     }
 
-    public void UsePotion(bool isShot)
+    public void UsePotion(bool isShot, PlayerController player)
     {
         Debug.Log("Used potion and wasShot: " + isShot);
         RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
@@ -60,11 +60,11 @@ public class GameManager : Singleton<GameManager>
         {
             //Damage all enemies on screen
             //If potion was used do damage based on class magic value
-            //if (!isShot)
-            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic);
-            ////If potion was shot do less damage 
-            //else if (isShot)
-            //    hits[i].transform.GetComponent<Enemy>().TakeDamage(classData.Magic / 2);
+            if (!isShot)
+                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic);
+            //If potion was shot do less damage 
+            else if (isShot)
+                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic / 2);
 
         }
     }
@@ -72,6 +72,18 @@ public class GameManager : Singleton<GameManager>
     public void ResetGame()
     {
         Debug.Log("Resetting game");
+        //Resets all players stats to base and then destorys players
+        for (int i = 0; i < playerManager.playerConfigs.Count; i++)
+        {
+            playerManager.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().classData.ResetValuesToDefault();
+            Destroy(playerManager.playerConfigs[i].PlayerParent.gameObject);
+        }
+        //Clears player lists
+        playerManager.playerConfigs.Clear();
+        playerManager.usedClasses.Clear();
+        //Published player left and disables joining
+        EventBus.Publish(EventType.PLAYER_LEFT);
+        EventBus.Publish(EventType.DISABLE_JOINING);
     }
 }
 

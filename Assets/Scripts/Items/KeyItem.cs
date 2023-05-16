@@ -12,7 +12,7 @@ public class KeyItem : MonoBehaviour, IFloorItem
         gameObject.SetActive(false);
     }
 
-    public void HandleShot()
+    public void HandleShot(PlayerController player)
     {
         
     }

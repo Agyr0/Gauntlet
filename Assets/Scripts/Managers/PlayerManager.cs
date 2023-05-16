@@ -21,12 +21,20 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [SerializeField]
     private List<ClassData> possibleClasses = new List<ClassData>();
-    private List<int> usedClasses = new List<int>();
+    public List<int> usedClasses = new List<int>();
 
     private void OnEnable()
     {
         playerManager = GetComponent<PlayerInputManager>();
         EventBus.Subscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
+        EventBus.Subscribe(EventType.DISABLE_JOINING, DisablePlayerJoining);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
+        EventBus.Unsubscribe(EventType.DISABLE_JOINING, DisablePlayerJoining);
+
     }
 
     private void Update()
@@ -38,6 +46,10 @@ public class PlayerManager : Singleton<PlayerManager>
     private void EnablePlayerJoining()
     {
         playerManager.EnableJoining();
+    }
+    private void DisablePlayerJoining()
+    {
+        playerManager.DisableJoining();
 
     }
 
@@ -47,7 +59,6 @@ public class PlayerManager : Singleton<PlayerManager>
         if (playerConfigs.Count == 0)
         {
             EventBus.Publish(EventType.GAME_START);
-            EventBus.Publish(EventType.NEXT_ROUND);
         }
        // Debug.Log(player.gameObject.GetComponent<PlayerController>().classData.PlayerPrefab);
         
@@ -90,7 +101,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private Vector3 FindSpawnPos()
     {
-        Vector2 newPos = Random.insideUnitCircle * spawnRadius;
+        Vector2 newPos = Random.insideUnitCircle * spawnRadius * camTarget.transform.position;
         int maxTrys = 10;
         int curTry = 0;
         while (curTry < maxTrys)

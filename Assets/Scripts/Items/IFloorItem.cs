@@ -7,6 +7,6 @@ public interface IFloorItem
     
     void HandlePickup(PlayerController player);
 
-    void HandleShot();
+    void HandleShot(PlayerController player);
 
 }

@@ -20,7 +20,7 @@ public class TreasureItem : MonoBehaviour, IFloorItem
         Destroy(gameObject);
     }
 
-    public void HandleShot()
+    public void HandleShot(PlayerController player)
     {
         Destroy(gameObject);
     }

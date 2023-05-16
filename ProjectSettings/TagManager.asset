@@ -3,15 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bullet/Elf
+  - Bullet/Warrior
+  - Bullet/Wizard
+  - Bullet/Valkyrie
+  - ScoreCanvas
+  - Inventory/Key
+  - Inventory/Potion
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Floor
   - 
   - 
   - 
