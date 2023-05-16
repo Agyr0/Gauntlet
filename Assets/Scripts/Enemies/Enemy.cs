@@ -5,58 +5,152 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] protected int health;
     [SerializeField] protected int damage;
+    [SerializeField] protected int pointValue;
     [SerializeField] protected float swingCooldown;
-    [SerializeField] protected float moveDelay;
-    private bool canStrike = true;
-    private GameObject targetPlayer;
-    private LayerMask playerMask = 3;
+    [SerializeField] protected float moveSpeed;
+    protected bool canStrike = true;
 
-    //Remember this can be triggered by the scene view camera
+    protected PlayerController warrior;
+    protected PlayerController valkyrie;
+    protected PlayerController wizard;
+    protected PlayerController elf;
+    [SerializeField] protected GameObject targetPlayer;
+    [SerializeField] protected IPlayer targetPlayerPlayer;
+    protected PlayerController[] myPlayers = new PlayerController[4];
+    protected LayerMask playerMask = 3;
+    [SerializeField] protected float detectionRadius = 100f;
+
+    //This can be triggered by the scene view camera as well as the main camera
     private void OnBecameVisible()
     {
-        Debug.Log("I'm Visible");
+        //Debug.Log("I'm Visible");
+        findTargetPlayer();
     }
     
+    /*
     private void OnEnable()
     {
-        //reset target player
+        findTargetPlayer();
+    }
+    */
+    protected virtual void findTargetPlayer()
+    {
+        myPlayers = FindObjectsOfType<PlayerController>();
+        //identifyPlayer();
+        targetPlayer = myPlayers[(Random.Range(0, 0))].gameObject;
+        targetPlayerPlayer = targetPlayer.GetComponent<PlayerController>().player;
+        StartCoroutine(Move());
     }
 
-    //check for layer "Player" bitmask overlap sphere?
-    //target closest player
-    protected IEnumerator Move()
+    private void identifyPlayer()
     {
-        yield return new WaitForSeconds(moveDelay);
+        for(short c = 0; myPlayers[c] != null; c++)
+        {
+            PlayerController currentPlayer = myPlayers[c];
+            switch (currentPlayer.classData.ClassType)
+            {
+                case ClassEnum.Warrior:
+                    warrior = currentPlayer;
+                    break;
+                case ClassEnum.Valkyrie:
+                    valkyrie = currentPlayer;
+                    break;
+                case ClassEnum.Wizard:
+                    wizard = currentPlayer;
+                    break;
+                case ClassEnum.Elf:
+                    elf = currentPlayer;
+                    break;
+                default:
+                    Debug.Log("Class Sort Defaulted in Enemy.cs");
+                    break;
+            }
+        }
+    }
+
+    protected virtual IEnumerator Move()
+    {
+        if(transform.position.x != targetPlayer.transform.position.x || transform.position.z != targetPlayer.transform.position.z)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPlayer.transform.position, Time.deltaTime*moveSpeed);
+        }
+
+        yield return new WaitForFixedUpdate();
+        StartCoroutine(Move());
+    }
+
+    protected virtual IEnumerator Attack(Collision victim)
+    {
+        canStrike = false;
+        victim.gameObject.GetComponent<PlayerController>().classData.CurHealth -= damage;
+        yield return new WaitForSeconds(swingCooldown);
+        canStrike = true;
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if(canStrike)
+        if (collision.gameObject.layer == 3 && canStrike)
         {
-            StartCoroutine(SwingCooldown(collision));
+            StartCoroutine(Attack(collision));
         }
     }
 
-    IEnumerator SwingCooldown(Collision victim)
+    protected void OnTriggerEnter(Collider other)
     {
-        canStrike = false;
-        yield return new WaitForSeconds(swingCooldown);
-        Debug.Log("swing"); //Get playerData? component in collision and call victim.TakeDamage(int damage)?
-        canStrike = true;
+        switch (other.tag)
+        {
+            case "Bullet/Warrior":
+                if(TakeDamage(100))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+                break;
+            case "Bullet/Wizard":
+                if (TakeDamage(200))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+                break;
+            case "Bullet/Valkyrie":
+                if (TakeDamage(120))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+            break;
+            case "Bullet/Elf":
+                if (TakeDamage(100))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+            break;
+            default:
+                break;
+        }
     }
 
-    protected void GivePoints(int points)
-    {
-        //Will call a script in ___ to give the player "points"
-    }
-
-    protected void TakeDamage(int damage)
+    public bool TakeDamage(int damage)
     {
         health -= damage;
+        if(health <= 0)
+        {
+            Die();
+            return true;
+        }
+        return false;
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
+        StopAllCoroutines();
         gameObject.SetActive(false);
+    }
+
+    public void GivePoints(PlayerController attackingPlayer)
+    {
+        attackingPlayer.classData.Score += pointValue;
     }
 }
