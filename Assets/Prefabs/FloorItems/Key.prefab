@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 6052639990514833734}
   - component: {fileID: 6052639990514833735}
   - component: {fileID: 5516900661592289636}
+  - component: {fileID: 8023842187763302926}
   m_Layer: 0
   m_Name: Key
   m_TagString: Inventory/Key
@@ -318,7 +319,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6052639990514833732}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -336,6 +337,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: d92c767436a7a49e08fc6433f0c1394e, type: 2}
+--- !u!54 &8023842187763302926
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6052639990514833732}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6052639990754714024
 GameObject:
   m_ObjectHideFlags: 0

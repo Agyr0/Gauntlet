@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.TextCore;
 
 public class PlayerController : MonoBehaviour
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
     #region Input
     private Vector2 movement;
     private bool hasShot, usedItem = false;
+    public MultiplayerEventSystem m_eventSystem;
     #endregion
 
     private void Start()
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour
         gameManager = GameManager.Instance;
         _playerInput = GetComponent<PlayerInput>();
         _playerConfig = PlayerManager.Instance.playerConfigs[_playerInput.playerIndex];
-
+        m_eventSystem = GetComponentInChildren<MultiplayerEventSystem>();
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
         screenBorder = new ScreenBorder();
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
     public void OnPause(InputAction.CallbackContext context)
     {
         UIManager.Instance.isPaused = !UIManager.Instance.isPaused;
-
+        UIManager.Instance._eventSystem = m_eventSystem;
         UIManager.Instance.state = UIManager.Instance.isPaused ? CanvasState.Pause : CanvasState.Level;
         EventBus.Publish(EventType.UI_CHANGED);
 
@@ -324,6 +326,7 @@ public class PlayerController : MonoBehaviour
         {
             floorItem.HandlePickup(this);
             UIManager.Instance.HandleScoreUI(classData);
+            UIManager.Instance.HandleHealthUI(classData);
         }
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -333,7 +336,7 @@ public class PlayerController : MonoBehaviour
         {
             floorItem.HandlePickup(this);
             UIManager.Instance.HandleScoreUI(classData);
-
+            UIManager.Instance.HandleHealthUI(classData);
         }
     }
 }

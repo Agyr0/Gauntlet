@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 
 public class GameManager : Singleton<GameManager>
@@ -11,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     public InventoryManager inventoryManager;
     public Transform screenCenter;
     public ScreenBorder screenBorder;
+    private string potionEffect = "PotionEffect";
     private int _level = 0;
 
     public int Level { get { return _level; } }
@@ -67,6 +69,13 @@ public class GameManager : Singleton<GameManager>
                 hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic / 2);
 
         }
+        GameObject potion = ObjectPooler.Instance.GetPooledObject(potionEffect);
+        if (potion != null)
+        {
+            potion.transform.position = player.transform.position;
+            potion.transform.rotation = Quaternion.identity;
+            potion.SetActive(true);
+        }
     }
 
     public void ResetGame()
@@ -81,6 +90,10 @@ public class GameManager : Singleton<GameManager>
         //Clears player lists
         playerManager.playerConfigs.Clear();
         playerManager.usedClasses.Clear();
+        //Stop naration
+        NaratorManager.Instance.audioSource.Stop();
+        //Set level back to 1
+        _level = 1;
         //Published player left and disables joining
         EventBus.Publish(EventType.PLAYER_LEFT);
         EventBus.Publish(EventType.DISABLE_JOINING);

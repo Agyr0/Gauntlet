@@ -10,6 +10,7 @@ public class PotionItem : MonoBehaviour, IFloorItem
     {
         gameObject.SetActive(false);
         InventoryManager.Instance.AddItemToInventory(player, data);
+        Debug.LogWarning("Picked up one potion");
     }
 
     public void HandleShot(PlayerController player)

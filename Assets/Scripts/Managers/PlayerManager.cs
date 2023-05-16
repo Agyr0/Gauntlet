@@ -153,6 +153,7 @@ public class PlayerConfiguration
         PlayedAboutToDie = false;
         PlayedLowHealth = false;
         PlayedNeedFood = false;
+        PlayerDevice = player.devices[0];
     }
     [SerializeField]
     public ClassData PlayerClass { get; set; }
@@ -168,6 +169,8 @@ public class PlayerConfiguration
     public bool PlayedLowHealth { get; set; }
     [SerializeField]
     public bool PlayedNeedFood { get; set; }
+    [SerializeField]
+    public InputDevice PlayerDevice { get; set; }
     
 
 }

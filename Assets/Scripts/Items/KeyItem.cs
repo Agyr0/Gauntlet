@@ -8,8 +8,10 @@ public class KeyItem : MonoBehaviour, IFloorItem
 
     public void HandlePickup(PlayerController player)
     {
-        InventoryManager.Instance.AddItemToInventory(player, data);
         gameObject.SetActive(false);
+        InventoryManager.Instance.AddItemToInventory(player, data);
+        Debug.LogWarning("Picked up one key");
+
     }
 
     public void HandleShot(PlayerController player)

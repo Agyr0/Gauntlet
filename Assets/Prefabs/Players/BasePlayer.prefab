@@ -29,7 +29,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3426786498938412874}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -72,7 +73,10 @@ MonoBehaviour:
     myPlayer: {fileID: 0}
     myPlayerClass: {fileID: 0}
     myPlayerClassType: 0
+    maxItems: 0
     myItems: []
+    uiItems: []
+  m_eventSystem: {fileID: 0}
 --- !u!114 &9140873238424520457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
   m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
+  m_UIInputModule: {fileID: 7340104837721867612}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -190,8 +194,125 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 84431f62-c203-450b-a986-9e7d6f02a5b3
     m_ActionName: UI/Join[/XInputControllerWindows/start,/Keyboard/anyKey]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9fa94e0-2c3b-4e7f-9579-7ef0962e68a4
+    m_ActionName: UI1/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 789d4c9a-fd43-49ef-af52-34e2a1e6ebd2
+    m_ActionName: UI1/Submit[/Keyboard/enter,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5ee46142-57f1-410c-96e4-551e5f567672
+    m_ActionName: UI1/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 31f5ba81-ffb8-499d-a8af-9cb13cec7e6e
+    m_ActionName: UI1/Point[/Mouse/position,/Pen/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8bff63bf-f6eb-4dd3-bb54-9e3021857aab
+    m_ActionName: UI1/Click[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 61dc3131-aad6-4db5-8449-d87fb1516481
+    m_ActionName: UI1/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e2947a07-a333-4b65-adad-818f2eefe653
+    m_ActionName: UI1/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c27f5835-5bef-43de-8ecc-5a1febd13b38
+    m_ActionName: UI1/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: edffca94-11e3-49f8-b309-b7475322bf58
+    m_ActionName: UI1/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ac23bce9-5d14-4b8a-8fdb-b8b70ea11b53
+    m_ActionName: UI1/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Controller
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &4257953117111447459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3426786498938412874}
+  - component: {fileID: 6135476532605268746}
+  - component: {fileID: 7340104837721867612}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3426786498938412874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4257953117111447459}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1961485798973243944}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6135476532605268746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4257953117111447459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+  m_PlayerRoot: {fileID: 1961485798973243946}
+--- !u!114 &7340104837721867612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4257953117111447459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_PointAction: {fileID: 7383071331233507758, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_MoveAction: {fileID: -582220218795403115, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_SubmitAction: {fileID: -3017646317412733383, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_CancelAction: {fileID: 7860123078914216483, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_LeftClickAction: {fileID: 2724561550332735299, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_MiddleClickAction: {fileID: -4800321750056007599, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_RightClickAction: {fileID: 2477835264530678273, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_ScrollWheelAction: {fileID: -6785993435328883174, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_TrackedDevicePositionAction: {fileID: -1699255035658204091, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 9032521191212694398, guid: 2f74272d0d0c446aba2ad5d5d183a81e, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0

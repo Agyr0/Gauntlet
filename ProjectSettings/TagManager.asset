@@ -11,6 +11,7 @@ TagManager:
   - ScoreCanvas
   - Inventory/Key
   - Inventory/Potion
+  - PotionEffect
   layers:
   - Default
   - TransparentFX

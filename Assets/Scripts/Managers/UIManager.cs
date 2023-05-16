@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public enum CanvasState
@@ -16,12 +17,12 @@ public enum CanvasState
 public class UIManager : Singleton<UIManager>
 {
     public CanvasState state = CanvasState.Start;
-    [SerializeField] private EventSystem _eventSystem;
+    [HideInInspector] public MultiplayerEventSystem _eventSystem;
     private List<Canvas> curCanvas = new List<Canvas>();
 
     [SerializeField]
     private Canvas startCanvas;
-    [SerializeField] private GameObject startFirstSelectedButton;
+    [SerializeField] private Button startFirstSelectedButton;
 
     [SerializeField]
     private Canvas levelCanvas;
@@ -29,7 +30,7 @@ public class UIManager : Singleton<UIManager>
 
     [SerializeField]
     private Canvas pauseCanvas;
-    [SerializeField] private GameObject pauseFirstSelectedButton;
+    [SerializeField] private Button pauseFirstSelectedButton;
     public bool isPaused = false;
 
     [SerializeField]
@@ -39,11 +40,11 @@ public class UIManager : Singleton<UIManager>
 
     [SerializeField]
     private Canvas gameOverCanvas;
-    [SerializeField] private GameObject gameOverFirstSelectedButton;
+    [SerializeField] private Button gameOverFirstSelectedButton;
 
     [SerializeField]
     private Canvas creditsCanvas;
-    [SerializeField] private GameObject creditsFirstSelectedButton;
+    [SerializeField] private Button creditsFirstSelectedButton;
 
 
     private void OnEnable()
@@ -109,7 +110,8 @@ public class UIManager : Singleton<UIManager>
     private void DisplayStartCanvas()
     {
         DisableOtherCanvas(startCanvas);
-        _eventSystem.SetSelectedGameObject(startFirstSelectedButton);
+        
+        startFirstSelectedButton.Select();
         for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
         {
             PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
@@ -120,7 +122,6 @@ public class UIManager : Singleton<UIManager>
     private void DisplayLevelCanvas()
     {
         DisableOtherCanvas(levelCanvas);
-        _eventSystem.firstSelectedGameObject = null;
         isPaused = false;
         NaratorManager.Instance.audioSource.UnPause();
         for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
@@ -129,13 +130,14 @@ public class UIManager : Singleton<UIManager>
         }
         SetTimeScale(true);
         CursorState(false);
+
     }
     private void DisplayGameOverCanvas()
     {
         DisableOtherCanvas(gameOverCanvas);
-        _eventSystem.SetSelectedGameObject(gameOverFirstSelectedButton);
         SetTimeScale(false);
         CursorState(false);
+        gameOverFirstSelectedButton.Select();
     }
     private void DisplayPausedCanvas()
     {
@@ -144,9 +146,9 @@ public class UIManager : Singleton<UIManager>
         {
             PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
         }
-        _eventSystem.SetSelectedGameObject(pauseFirstSelectedButton);
         SetTimeScale(false);
         CursorState(false);
+        pauseFirstSelectedButton.Select();
     }
     private void DisplayCreditsCanvas()
     {
@@ -155,9 +157,9 @@ public class UIManager : Singleton<UIManager>
         {
             PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
         }
-        _eventSystem.SetSelectedGameObject(creditsFirstSelectedButton);
         SetTimeScale(false);
         CursorState(false);
+        creditsFirstSelectedButton.Select();
     }
 
     #endregion
@@ -191,14 +193,30 @@ public class UIManager : Singleton<UIManager>
         state = CanvasState.Start;
         GameManager.Instance.ResetGame();
         EventBus.Publish(EventType.UI_CHANGED);
-
     }
 
     public void PlayerLeave()
     {
-        EventBus.Publish(EventType.PLAYER_LEFT);
-        BaseInputModule currentInputModule = EventSystem.current.currentInputModule;
-        Debug.LogWarning(InputSystem.GetDevice(currentInputModule.name));
+        //If there is more than one player than let them leave
+        if (PlayerManager.Instance.playerConfigs.Count > 1)
+        {
+            PlayerController leavingPlayer = null;
+            leavingPlayer = _eventSystem.playerRoot.GetComponent<PlayerController>();
+            Debug.LogWarning(leavingPlayer);
+            //Resets players stats to base and then destorys player
+            for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+            {
+                leavingPlayer.classData.ResetValuesToDefault();
+                //Clears player lists
+                PlayerManager.Instance.playerConfigs.RemoveAt(i);
+                PlayerManager.Instance.usedClasses.RemoveAt(i);
+                Destroy(leavingPlayer.gameObject);
+            }
+            EventBus.Publish(EventType.PLAYER_LEFT);
+        }
+        //If there is only one player then take back to start and reset game
+        else
+            Menu();
     }
     #endregion
 
