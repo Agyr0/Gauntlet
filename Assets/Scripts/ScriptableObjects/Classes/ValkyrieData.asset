@@ -16,7 +16,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 6703871650688292901, guid: 455a54995c5dcd040b294fd678725ccb, type: 3}
   projectilePrefab: {fileID: 999021191262322043, guid: 69da6e9cedb23d74bab81566dc8fc376, type: 3}
   classType: 1
-  curHealth: 697
+  curHealth: 700
   curSpeed: 10
   armor: 3
   shootTime: 0.3

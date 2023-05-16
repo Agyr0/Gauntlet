@@ -215,7 +215,7 @@ public class UIManager : Singleton<UIManager>
                     PlayerManager.Instance.playerConfigs.RemoveAt(i);
                     PlayerManager.Instance.usedClasses.RemoveAt(i);                    
                     leavingPlayer.m_inventory = null;
-                    Destroy(gameObject);
+                    Destroy(leavingPlayer.gameObject);
                 }
             }
             EventBus.Publish(EventType.PLAYER_LEFT);
