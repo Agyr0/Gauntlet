@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1961485798973243945}
   - component: {fileID: 1961485798973243943}
   - component: {fileID: 9140873238424520457}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,9 +66,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classData: {fileID: 11400000, guid: 6dcde09aa6633417d925decf8ea90590, type: 2}
+  myBullet: 
   canMove: 1
   canShoot: 1
   canUseItem: 1
+  m_inventory:
+    myPlayer: {fileID: 0}
+    myPlayerClass: {fileID: 0}
+    myPlayerClassType: 0
+    myItems: []
 --- !u!114 &9140873238424520457
 MonoBehaviour:
   m_ObjectHideFlags: 0

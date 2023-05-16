@@ -110,10 +110,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  damage: 50
+  damage: 10
   pointValue: 100
   swingCooldown: 1
-  moveSpeed: 1
+  moveSpeed: 5
+  targetPlayer: {fileID: 0}
   detectionRadius: 100
 --- !u!54 &-8557157561258136854
 Rigidbody:

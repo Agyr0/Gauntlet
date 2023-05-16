@@ -8,14 +8,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int pointValue;
     [SerializeField] protected float swingCooldown;
     [SerializeField] protected float moveSpeed;
-    private bool canStrike = true;
+    protected bool canStrike = true;
 
-    protected IPlayer warrior;
-    protected IPlayer valkyrie;
-    protected IPlayer wizard;
-    protected IPlayer elf;
-    private GameObject targetPlayer;
-    protected Collider[] playerColliders = new Collider[4];
+    protected PlayerController warrior;
+    protected PlayerController valkyrie;
+    protected PlayerController wizard;
+    protected PlayerController elf;
+    [SerializeField] protected GameObject targetPlayer;
+    [SerializeField] protected IPlayer targetPlayerPlayer;
+    protected PlayerController[] myPlayers = new PlayerController[4];
     protected LayerMask playerMask = 3;
     [SerializeField] protected float detectionRadius = 100f;
 
@@ -26,19 +27,27 @@ public class Enemy : MonoBehaviour
         findTargetPlayer();
     }
     
+    /*
     private void OnEnable()
     {
         findTargetPlayer();
     }
-
+    */
     protected virtual void findTargetPlayer()
     {
-        int playerCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, playerColliders, playerMask);
+        myPlayers = FindObjectsOfType<PlayerController>();
+        //identifyPlayer();
+        targetPlayer = myPlayers[(Random.Range(0, 0))].gameObject;
+        targetPlayerPlayer = targetPlayer.GetComponent<PlayerController>().player;
+        StartCoroutine(Move());
+    }
 
-        for(short c = 0; c < playerCount; c++)
+    private void identifyPlayer()
+    {
+        for(short c = 0; myPlayers[c] != null; c++)
         {
-            IPlayer currentPlayer = playerColliders[c].gameObject.GetComponent<IPlayer>();
-            switch (currentPlayer.ClassType)
+            PlayerController currentPlayer = myPlayers[c];
+            switch (currentPlayer.classData.ClassType)
             {
                 case ClassEnum.Warrior:
                     warrior = currentPlayer;
@@ -53,29 +62,27 @@ public class Enemy : MonoBehaviour
                     elf = currentPlayer;
                     break;
                 default:
-                    Debug.Log("Class Sort Defauted in Enemy.cs");
+                    Debug.Log("Class Sort Defaulted in Enemy.cs");
                     break;
             }
         }
-
-        targetPlayer = playerColliders[(Random.Range(0, playerCount))].gameObject;
-        StartCoroutine(Move());
     }
 
     protected virtual IEnumerator Move()
     {
-        while(transform.position.x != targetPlayer.transform.position.x || transform.position.z != targetPlayer.transform.position.z)
+        if(transform.position.x != targetPlayer.transform.position.x || transform.position.z != targetPlayer.transform.position.z)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPlayer.transform.position, Time.deltaTime*moveSpeed);
         }
 
-        yield return null;
+        yield return new WaitForFixedUpdate();
+        StartCoroutine(Move());
     }
 
     protected virtual IEnumerator Attack(Collision victim)
     {
         canStrike = false;
-        victim.gameObject.GetComponent<Player>().CurHealth -= damage;
+        victim.gameObject.GetComponent<PlayerController>().classData.CurHealth -= damage;
         yield return new WaitForSeconds(swingCooldown);
         canStrike = true;
     }
@@ -86,37 +93,42 @@ public class Enemy : MonoBehaviour
         {
             StartCoroutine(Attack(collision));
         }
-        else
+    }
+
+    protected void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
         {
-            switch(collision.gameObject.tag)
-            {
-                case "Bullet/Warrior":
-                    if(TakeDamage(100))
-                    {
-                        warrior.Score += pointValue;
-                    }
-                    break;
-                case "Bullet/Wizard":
-                    if (TakeDamage(200))
-                    {
-                        wizard.Score += pointValue;
-                    }
-                    break;
-                case "Bullet/Valkyrie":
-                    if (TakeDamage(120))
-                    {
-                        valkyrie.Score += pointValue;
-                    }
-                    break;
-                case "Bullet/Elf":
-                    if (TakeDamage(100))
-                    {
-                        elf.Score += pointValue;
-                    }
-                    break;
-                default:
-                    break;
-            }
+            case "Bullet/Warrior":
+                if(TakeDamage(100))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+                break;
+            case "Bullet/Wizard":
+                if (TakeDamage(200))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+                break;
+            case "Bullet/Valkyrie":
+                if (TakeDamage(120))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+            break;
+            case "Bullet/Elf":
+                if (TakeDamage(100))
+                {
+                    other.gameObject.SetActive(false);
+                    targetPlayerPlayer.Score += pointValue;
+                }
+            break;
+            default:
+                break;
         }
     }
 
@@ -137,8 +149,8 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void GivePoints(Player attackingPlayer)
+    public void GivePoints(PlayerController attackingPlayer)
     {
-        attackingPlayer.Score += pointValue;
+        attackingPlayer.classData.Score += pointValue;
     }
 }

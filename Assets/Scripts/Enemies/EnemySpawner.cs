@@ -30,14 +30,15 @@ public class EnemySpawner : Enemy
         StartCoroutine(Spawn());
     }
 
+    /*
     protected override void findTargetPlayer()
     {
         int playerCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, playerColliders, playerMask);
 
         for (short c = 0; c < playerCount; c++)
         {
-            Player currentPlayer = playerColliders[c].gameObject.GetComponent<Player>();
-            switch (currentPlayer.ClassType)
+            PlayerController currentPlayer = playerColliders[c].gameObject.GetComponent<PlayerController>();
+            switch (currentPlayer.classData.ClassType)
             {
                 case ClassEnum.Warrior:
                     warrior = currentPlayer;
@@ -57,4 +58,5 @@ public class EnemySpawner : Enemy
             }
         }
     }
+    */
 }
