@@ -13,7 +13,9 @@ public class ObjectPoolItem
 public class ObjectPooler : Singleton<ObjectPooler>
 {
     public List<GameObject> pooledObjects;
+#if UNITY_EDITOR
     [ListElementTitle("objectToPool")]
+#endif
     public List<ObjectPoolItem> itemsToPool;
 
     private void Start()

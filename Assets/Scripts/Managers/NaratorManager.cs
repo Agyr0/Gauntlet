@@ -65,8 +65,9 @@ public class NaratorManager : Singleton<NaratorManager>
     public bool canPlayRandomClip = true;
     #region Lists
     public List<ClassData> classList = new List<ClassData>();
-
+#if UNITY_EDITOR
     [ListElementTitle("Prompt")]
+#endif
     public List<NarationPrompt> promptList = new List<NarationPrompt>();
     #endregion
 

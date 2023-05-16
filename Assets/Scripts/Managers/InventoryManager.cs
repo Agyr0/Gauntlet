@@ -30,7 +30,9 @@ public class PlayerInventory
 
 public class InventoryManager : Singleton<InventoryManager>
 {
+#if UNITY_EDITOR
     [ListElementTitle("myPlayerClassType")]
+#endif
     public List<PlayerInventory> playersInventories = new List<PlayerInventory>();
 
 
