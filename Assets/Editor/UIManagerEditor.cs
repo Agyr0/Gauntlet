@@ -9,7 +9,6 @@ public class UIManagerEditor : Editor
     #region Variables
 
     SerializedProperty state;
-    SerializedProperty _eventSystem;
 
     SerializedProperty startCanvas;     
     SerializedProperty startFirstSelectedButton;
@@ -99,7 +98,6 @@ public class UIManagerEditor : Editor
         EditorGUI.indentLevel++;
         EditorGUILayout.Space(10);
         EditorGUILayout.PropertyField(state);
-        EditorGUILayout.PropertyField(_eventSystem);
         EditorGUILayout.Space(10);
         EditorGUI.indentLevel--;
 
