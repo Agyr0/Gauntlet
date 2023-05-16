@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     private float tempHealth, tempScore;
 
+    private string deathEffect = "DeathEffect";
+
+
     #region Item and Inventory Stuff
     //[HideInInspector]
     public PlayerInventory m_inventory;
@@ -35,14 +38,18 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Input
+    private PlayerInput _input;
     private Vector2 movement;
     private bool hasShot, usedItem = false;
     public MultiplayerEventSystem m_eventSystem;
     #endregion
 
+    private void OnEnable()
+    {
+        myBullet = "Bullet/" + classData.ClassType.ToString();
+    }
     private void Start()
     {
-        HandlePlayerGFX();
         player = new Player(classData);
         gameManager = GameManager.Instance;
         _playerInput = GetComponent<PlayerInput>();
@@ -51,11 +58,7 @@ public class PlayerController : MonoBehaviour
         mainCamTransform = Camera.main.transform;
         controller = GetComponent<CharacterController>();
         screenBorder = new ScreenBorder();
-
-        if (classData.CurHealth != 700)
-            classData.CurHealth = 700;
-
-        myBullet = "Bullet/" + classData.ClassType.ToString();
+        _input = GetComponentInChildren<PlayerInput>();
 
         classData.ResetValuesToDefault();
 
@@ -82,6 +85,7 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+        HandlePlayerGFX();
 
         StartCoroutine(ReduceHealthOverTime());
 
@@ -105,8 +109,14 @@ public class PlayerController : MonoBehaviour
         transform.position = screenBorder.ClampToInside(transform, controller.radius, controller.radius);
     }
 
-    private void HandlePlayerGFX()
+    public void HandlePlayerGFX()
     {
+        //If there is already a GFX destroy it
+        if(transform.childCount > 1)
+            for (int i = 1; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
         GameObject gfx = Instantiate(classData.PlayerPrefab, transform.position, Quaternion.identity, transform);
         this.gameObject.name = classData.PlayerPrefab.name;
     }
@@ -230,7 +240,7 @@ public class PlayerController : MonoBehaviour
                     if (hasPotions)
                     {
                         //Use potion
-                        GameManager.Instance.UsePotion(false, this);
+                        GameManager.Instance.UsePotion(this);
 
                         //Remove from inventory
                         GameObject potion = null;
@@ -276,6 +286,61 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    public void HandleItem(PlayerController player)
+    {
+
+        //Check which item to use
+        switch (itemToUse)
+        {
+            case ItemEnum.Potion:
+                bool hasPotions = m_inventory.myItems.Any(item => item.ItemType == ItemEnum.Potion);
+                if (hasPotions)
+                {
+                    //Remove from inventory
+                    GameObject potion = null;
+                    for (int i = 0; i < classData.MyUIInventory.transform.childCount; i++)
+                    {
+                        Transform child = classData.MyUIInventory.transform.GetChild(i);
+                        if (child.gameObject.name == "PotionIcon(Clone)")
+                        {
+                            potion = child.gameObject;
+                        }
+                    }
+                    potion.SetActive(false);
+                    potion.transform.SetParent(ObjectPooler.Instance.transform);
+                    RemoveItemFromInventory(itemToUse);
+                }
+
+                break;
+            case ItemEnum.Key:
+                bool hasKeys = m_inventory.myItems.Any(item => item.ItemType == ItemEnum.Key);
+                if (hasKeys)
+                {
+                    //Remove from inventory
+                    GameObject key = null;
+                    for (int i = 0; i < classData.MyUIInventory.transform.childCount; i++)
+                    {
+                        Transform child = classData.MyUIInventory.transform.GetChild(i);
+                        if (child.gameObject.name == "KeyIcon(Clone)")
+                        {
+                            key = child.gameObject;
+                        }
+                    }
+                    key.SetActive(false);
+                    key.transform.SetParent(ObjectPooler.Instance.transform);
+                    RemoveItemFromInventory(itemToUse);
+                    //InventoryManager.Instance.RemoveItemFromInventory(this, key.GetComponent<KeyItem>().data);
+                }
+                break;
+            default:
+                break;
+        }
+        
+    }
+    /// <summary>
+    /// Used for removing a specific item from inventory
+    /// </summary>
+    /// <param name="_item"></param>
     private void RemoveItemFromInventory(ItemEnum _item)
     {
         if (m_inventory.myItems.Count > 0)
@@ -292,15 +357,30 @@ public class PlayerController : MonoBehaviour
                     //Remove it from my inventory
                     m_inventory.myItems.RemoveAt(i);
                     m_inventory.uiItems.RemoveAt(i);
-                    Debug.Log("Removed Potion from inventory");
                     return;
-
                 }
             }
         }
     }
+    /// <summary>
+    /// Used for removing all items from inventory
+    /// </summary>
+    public void RemoveItemFromInventory()
+    {
+        if (m_inventory.myItems.Count > 0)
+        {
+            for (int i = 0; i < m_inventory.myItems.Count; i++)
+            {
+                //Remove it from my inventory
+                m_inventory.myItems.RemoveAt(i);
+                m_inventory.uiItems.RemoveAt(i);
+            }
+            //Clears inventory manager
+        }
+            InventoryManager.Instance.ClearPlayerInventory(this);
+    }
 
-    
+
     private void UseKey()
     {
 
@@ -315,6 +395,36 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.HandleHealthUI(classData);
 
         }
+        yield return null;
+        if(classData.CurHealth <= 0)
+        {
+            //Spawn Particle
+            GameObject effect = ObjectPooler.Instance.GetPooledObject(deathEffect);
+            if (effect != null)
+            {
+                effect.transform.position = this.transform.position;
+                effect.transform.rotation = Quaternion.identity;
+                effect.SetActive(true);
+            }
+            //Resets players stats to base and then destorys player
+            classData.ResetValuesToDefault();
+            RemoveItemFromInventory();
+            for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+            {
+                if (PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>() == this)
+                {
+                    //Clears player lists
+                    PlayerManager.Instance.playerConfigs.RemoveAt(i);
+                    //PlayerManager.Instance.usedClasses.RemoveAt(i);
+                    m_inventory = null;
+                    Destroy(gameObject);
+                }
+            }
+            EventBus.Publish(EventType.PLAYER_LEFT);
+            UIManager.Instance.HandleHealthUI(classData);
+        }
+        yield return null;
+
     }
 
     #endregion

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
@@ -131,6 +132,7 @@ public class InventoryManager : Singleton<InventoryManager>
                     break;
             }
             _item.transform.SetAsLastSibling();
+            _item.transform.localScale = Vector3.one;
             _item.SetActive(true);
             Debug.Log(_item, _item);
 
@@ -142,6 +144,19 @@ public class InventoryManager : Singleton<InventoryManager>
             Debug.Log(_item, _item);
         }
 
+    }
+
+
+    public void ClearPlayerInventory(PlayerController player)
+    {
+        for (int i = 0; i < playersInventories.Count; i++)
+        {
+            if (playersInventories[i].myPlayer == player)
+            {
+                playersInventories.RemoveAt(i);
+                break;
+            }
+        }
     }
 }
 

@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 999021191262322037}
   - component: {fileID: 999021191262322042}
   - component: {fileID: 999021191262322036}
+  - component: {fileID: 4203611656502151790}
   m_Layer: 0
   m_Name: WarriorBullet
   m_TagString: Bullet/Warrior
@@ -141,3 +142,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
+  m_player: {fileID: 0}
+--- !u!54 &4203611656502151790
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999021191262322043}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

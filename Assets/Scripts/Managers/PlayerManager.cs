@@ -16,8 +16,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [Header("Variables")]
     [SerializeField] private float spawnRadius = 3f;
-    [SerializeField]
-    private int maxPlayers = 4;
+
 
     [SerializeField]
     private List<ClassData> possibleClasses = new List<ClassData>();
@@ -88,7 +87,8 @@ public class PlayerManager : Singleton<PlayerManager>
             }
         }
         //Assign the new player with the class at classIndex
-        playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = possibleClasses[classIndex];
+        playerConfigs[player.playerIndex].PlayerClass = possibleClasses[classIndex];
+        playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = playerConfigs[player.playerIndex].PlayerClass;
         //Add the class index to the usedClasses
         usedClasses.Add(classIndex);
         EventBus.Publish(EventType.PLAYER_JOINED);
@@ -156,9 +156,13 @@ public class PlayerConfiguration
         PlayerDevice = player.devices[0];
     }
     [SerializeField]
-    public ClassData PlayerClass { get; set; }
+    public Transform parent;
     [SerializeField]
-    public Transform PlayerParent { get; set; }
+    public ClassData _class;
+    [SerializeField]
+    public ClassData PlayerClass { get { return _class; } set { _class = value; } }
+    [SerializeField]
+    public Transform PlayerParent { get { return parent; } set { parent = value; } }
     [SerializeField]
     public PlayerInput Input { get; set; }
     [SerializeField]

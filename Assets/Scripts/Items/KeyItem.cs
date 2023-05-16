@@ -10,7 +10,6 @@ public class KeyItem : MonoBehaviour, IFloorItem
     {
         gameObject.SetActive(false);
         InventoryManager.Instance.AddItemToInventory(player, data);
-        Debug.LogWarning("Picked up one key");
 
     }
 

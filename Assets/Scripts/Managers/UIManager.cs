@@ -168,6 +168,8 @@ public class UIManager : Singleton<UIManager>
     public void StartGame()
     {
         state = CanvasState.Level;
+        NaratorManager.Instance.canPlayRandomClip = true;
+
         EventBus.Publish(EventType.UI_CHANGED);        
         EventBus.Publish(EventType.ENABLE_JOINING);
         EventBus.Publish(EventType.LEVEL_CHANGED);
@@ -203,14 +205,18 @@ public class UIManager : Singleton<UIManager>
             PlayerController leavingPlayer = null;
             leavingPlayer = _eventSystem.playerRoot.GetComponent<PlayerController>();
             Debug.LogWarning(leavingPlayer);
+            leavingPlayer.classData.ResetValuesToDefault();
             //Resets players stats to base and then destorys player
             for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
             {
-                leavingPlayer.classData.ResetValuesToDefault();
                 //Clears player lists
-                PlayerManager.Instance.playerConfigs.RemoveAt(i);
-                PlayerManager.Instance.usedClasses.RemoveAt(i);
-                Destroy(leavingPlayer.gameObject);
+                if (PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>() == leavingPlayer)
+                {
+                    PlayerManager.Instance.playerConfigs.RemoveAt(i);
+                    PlayerManager.Instance.usedClasses.RemoveAt(i);                    
+                    leavingPlayer.m_inventory = null;
+                    Destroy(gameObject);
+                }
             }
             EventBus.Publish(EventType.PLAYER_LEFT);
         }
@@ -218,6 +224,7 @@ public class UIManager : Singleton<UIManager>
         else
             Menu();
     }
+
     #endregion
 
 
@@ -281,7 +288,7 @@ public class UIManager : Singleton<UIManager>
     /// Sets time scale to 1 if <paramref name="isPlaying"/> is true or to 0 if <paramref name="isPlaying"/> is false
     /// </summary>
     /// <param name="isPlaying"></param>
-    private void SetTimeScale(bool isPlaying)
+    public void SetTimeScale(bool isPlaying)
     {
         Time.timeScale = isPlaying ? 1f : 0f;
     }

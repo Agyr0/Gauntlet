@@ -212,7 +212,7 @@ MonoBehaviour:
   promptList:
   - Prompt: 1
     PromptID: 0
-    MainClip: {fileID: 8300000, guid: ab85465ccf8b5704ab65f0c739f4c6cb, type: 3}
+    MainClip: {fileID: 8300000, guid: 9ecb0f7aa4ec2f94a8effb2597c9f369, type: 3}
     ToPlayer: 0
     DirectedToPlayer: {fileID: 0}
   - Prompt: 2
@@ -255,7 +255,7 @@ MonoBehaviour:
     MainClip: {fileID: 8300000, guid: 4118caa08bb9afb42ab83866f95dcccf, type: 3}
     ToPlayer: 1
     DirectedToPlayer: {fileID: 0}
-  randomNarationEvents: 06000000050000000a00000009000000
+  randomNarationEvents: 08000000090000000c0000000d000000
 --- !u!82 &1662979150584223520
 AudioSource:
   m_ObjectHideFlags: 0

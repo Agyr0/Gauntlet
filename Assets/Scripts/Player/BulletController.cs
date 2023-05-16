@@ -32,6 +32,8 @@ public class BulletController : MonoBehaviour
         if(other.gameObject.GetComponent<IFloorItem>() != null)
         {
             other.gameObject.GetComponent<IFloorItem>().HandleShot(m_player);
+            gameObject.SetActive(false);
+
         }
     }
 
@@ -40,6 +42,7 @@ public class BulletController : MonoBehaviour
         if (collision.gameObject.GetComponent<IFloorItem>() != null)
         {
             collision.gameObject.GetComponent<IFloorItem>().HandleShot(m_player);
+            gameObject.SetActive(false);
         }
     }
 }

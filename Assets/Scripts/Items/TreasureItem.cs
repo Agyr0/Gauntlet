@@ -22,6 +22,6 @@ public class TreasureItem : MonoBehaviour, IFloorItem
 
     public void HandleShot(PlayerController player)
     {
-        Destroy(gameObject);
+
     }
 }

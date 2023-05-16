@@ -54,7 +54,6 @@ public class UIManagerEditor : Editor
     private void OnEnable()
     {
         state = serializedObject.FindProperty("state");
-        _eventSystem = serializedObject.FindProperty("_eventSystem");
 
         startCanvas = serializedObject.FindProperty("startCanvas");     
         startFirstSelectedButton = serializedObject.FindProperty("startFirstSelectedButton");     

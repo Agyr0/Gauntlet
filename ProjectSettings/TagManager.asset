@@ -12,6 +12,7 @@ TagManager:
   - Inventory/Key
   - Inventory/Potion
   - PotionEffect
+  - DeathEffect
   layers:
   - Default
   - TransparentFX

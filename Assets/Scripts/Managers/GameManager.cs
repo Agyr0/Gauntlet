@@ -14,17 +14,18 @@ public class GameManager : Singleton<GameManager>
     public ScreenBorder screenBorder;
     private string potionEffect = "PotionEffect";
     private int _level = 0;
-
     public int Level { get { return _level; } }
 
     private void OnEnable()
     {
         _level = 1;
         EventBus.Subscribe(EventType.NEXT_ROUND, IncreaseRound);
+        EventBus.Subscribe(EventType.PLAYER_LEFT, CheckGameOver);
     }
     private void OnDisable()
     {
         EventBus.Unsubscribe(EventType.NEXT_ROUND, IncreaseRound);
+        EventBus.Unsubscribe(EventType.PLAYER_LEFT, CheckGameOver);
     }
 
     private void Start()
@@ -32,7 +33,6 @@ public class GameManager : Singleton<GameManager>
         screenBorder = new ScreenBorder();
         playerManager = PlayerManager.Instance;
         inventoryManager = InventoryManager.Instance;
-        
     }
 
     /// <summary>
@@ -53,21 +53,19 @@ public class GameManager : Singleton<GameManager>
         _level += num;
         EventBus.Publish(EventType.LEVEL_CHANGED);
     }
-
-    public void UsePotion(bool isShot, PlayerController player)
+    /// <summary>
+    /// For when the potion is being used
+    /// </summary>
+    /// <param name="player"></param>
+    public void UsePotion(PlayerController player)
     {
-        Debug.Log("Used potion and wasShot: " + isShot);
         RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
         for (int i = 0; i < hits.Length; i++)
         {
             //Damage all enemies on screen
             //If potion was used do damage based on class magic value
-            if (!isShot)
+            if (hits[i].transform.GetComponent<Enemy>() != null)
                 hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic);
-            //If potion was shot do less damage 
-            else if (isShot)
-                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic / 2);
-
         }
         GameObject potion = ObjectPooler.Instance.GetPooledObject(potionEffect);
         if (potion != null)
@@ -77,10 +75,39 @@ public class GameManager : Singleton<GameManager>
             potion.SetActive(true);
         }
     }
+    /// <summary>
+    /// For when the potion is being shot
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="_potionObj"></param>
+    public void UsePotion(PlayerController player, GameObject _potionObj)
+    {
+        RaycastHit[] hits = Physics.BoxCastAll(Camera.main.transform.position, new Vector3(screenBorder.size.x, 20, screenBorder.size.y), Camera.main.transform.forward, Quaternion.identity, 30f, LayerMask.GetMask("Enemy"));
+        for (int i = 0; i < hits.Length; i++)
+        {
+            //Damage all enemies on screen
+            //If potion was shot do less damage 
+            if (hits[i].transform.GetComponent<Enemy>() != null)
+                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic / 2);
 
+        }
+        GameObject potion = ObjectPooler.Instance.GetPooledObject(potionEffect);
+        if (potion != null)
+        {
+            potion.transform.position = _potionObj.transform.position;
+            potion.transform.rotation = Quaternion.identity;
+            potion.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// Destroys all players in <see cref="PlayerManager.playerConfigs"/> and sets class data to default then clears 
+    /// <see cref="PlayerManager.playerConfigs"/> and <see cref="PlayerManager.usedClasses"/>.
+    /// <br> Finally, stops naration, resets level to "1" and publishes <see cref="EventType.PLAYER_LEFT"/> and <see cref="EventType.DISABLE_JOINING"/>. </br>
+    /// </summary>
     public void ResetGame()
     {
-        Debug.Log("Resetting game");
+        //Debug.Log("Resetting game");
         //Resets all players stats to base and then destorys players
         for (int i = 0; i < playerManager.playerConfigs.Count; i++)
         {
@@ -98,6 +125,29 @@ public class GameManager : Singleton<GameManager>
         EventBus.Publish(EventType.PLAYER_LEFT);
         EventBus.Publish(EventType.DISABLE_JOINING);
     }
+
+    private IEnumerator GameOverEvent()
+    {
+        EventBus.Publish(EventType.DISABLE_JOINING);
+        UIManager.Instance.SetTimeScale(false);
+        NaratorManager.Instance.canPlayRandomClip = false;
+        NaratorManager.Instance.audioSource.Stop();
+        yield return new WaitForSecondsRealtime(3f);
+
+        UIManager.Instance.state = CanvasState.GameOver;
+        EventBus.Publish(EventType.GAME_OVER);
+        EventBus.Publish(EventType.UI_CHANGED);
+
+        yield return null;
+    }
+
+    private void CheckGameOver()
+    {
+        if (playerManager.playerConfigs.Count > 0)
+            return;
+        if (UIManager.Instance.state == CanvasState.Level || UIManager.Instance.state == CanvasState.Pause)
+            StartCoroutine(GameOverEvent());
+    }
 }
 
 
@@ -109,7 +159,16 @@ public class ScreenBorder
 
     //Actual width and height of the screen in world units
     public Vector2 size = new Vector2(screenBounds.x, Camera.main.orthographicSize);
-    
+
+    /// <summary>
+    /// Returns true if object is outside of screen border.
+    /// <br> <paramref name="self"/> is the object you are checking. </br>
+    /// <br> With a buffer of <paramref name="height"/> and <paramref name="width"/>.</br>
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="height"></param>
+    /// <param name="width"></param>
+    /// <returns></returns>
     //Returns true if self + object radius is outside of screen border
     public bool IsOutside(Transform self, float height, float width)
     {
@@ -120,6 +179,15 @@ public class ScreenBorder
         return false;
     }
 
+    /// <summary>
+    /// Returns a Vector3 to clamp an object inside screen.
+    /// <br> Clamps <paramref name="self"/> to the viewable screen size. </br>
+    /// <br> With a buffer of <paramref name="height"/> and <paramref name="width"/>. </br>
+    /// </summary>
+    /// <param name="self"></param>
+    /// <param name="height"></param>
+    /// <param name="width"></param>
+    /// <returns></returns>
     //Returns a Vector3 that has X and Z clamped to the inside of the screen
     public Vector3 ClampToInside(Transform self, float height, float width)
     {
