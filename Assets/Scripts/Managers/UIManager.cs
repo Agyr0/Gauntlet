@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public enum CanvasState
@@ -10,17 +11,18 @@ public enum CanvasState
     Start,
     Level,
     GameOver,
-    Pause
+    Pause,
+    Credits
 };
 public class UIManager : Singleton<UIManager>
 {
     public CanvasState state = CanvasState.Start;
-    [SerializeField] private EventSystem _eventSystem;
+    [HideInInspector] public MultiplayerEventSystem _eventSystem;
     private List<Canvas> curCanvas = new List<Canvas>();
 
     [SerializeField]
     private Canvas startCanvas;
-    [SerializeField] private GameObject startFirstSelectedButton;
+    [SerializeField] private Button startFirstSelectedButton;
 
     [SerializeField]
     private Canvas levelCanvas;
@@ -28,7 +30,7 @@ public class UIManager : Singleton<UIManager>
 
     [SerializeField]
     private Canvas pauseCanvas;
-    [SerializeField] private GameObject pauseFirstSelectedButton;
+    [SerializeField] private Button pauseFirstSelectedButton;
     public bool isPaused = false;
 
     [SerializeField]
@@ -38,13 +40,17 @@ public class UIManager : Singleton<UIManager>
 
     [SerializeField]
     private Canvas gameOverCanvas;
-    [SerializeField] private GameObject gameOverFirstSelectedButton;
+    [SerializeField] private Button gameOverFirstSelectedButton;
+
+    [SerializeField]
+    private Canvas creditsCanvas;
+    [SerializeField] private Button creditsFirstSelectedButton;
 
 
     private void OnEnable()
     {
         EventBus.Subscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
-        EventBus.Subscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Subscribe(EventType.PLAYER_LEFT, RefreshPlayerUIActiveState);
         EventBus.Subscribe(EventType.LEVEL_CHANGED, HandleRoundNumber);
         EventBus.Subscribe(EventType.UI_CHANGED, HandleCanvasState);
 
@@ -54,7 +60,7 @@ public class UIManager : Singleton<UIManager>
     private void OnDisable()
     {
         EventBus.Unsubscribe(EventType.PLAYER_JOINED, AddPlayerToUI);
-        EventBus.Unsubscribe(EventType.PLAYER_LEFT, RemovePlayerFromUI);
+        EventBus.Unsubscribe(EventType.PLAYER_LEFT, RefreshPlayerUIActiveState);
         EventBus.Unsubscribe(EventType.LEVEL_CHANGED, HandleRoundNumber);
         EventBus.Unsubscribe(EventType.UI_CHANGED, HandleCanvasState);
 
@@ -69,6 +75,7 @@ public class UIManager : Singleton<UIManager>
         curCanvas.Add(levelCanvas);
         curCanvas.Add(pauseCanvas);
         curCanvas.Add(gameOverCanvas);
+        curCanvas.Add(creditsCanvas);
         EventBus.Publish(EventType.UI_CHANGED);
 
     }
@@ -91,7 +98,10 @@ public class UIManager : Singleton<UIManager>
             case CanvasState.Pause:
                 DisplayPausedCanvas();
                 break;
-        
+            case CanvasState.Credits:
+                DisplayCreditsCanvas();
+                break;
+
         }
     }
 
@@ -100,7 +110,8 @@ public class UIManager : Singleton<UIManager>
     private void DisplayStartCanvas()
     {
         DisableOtherCanvas(startCanvas);
-        _eventSystem.SetSelectedGameObject(startFirstSelectedButton);
+        
+        startFirstSelectedButton.Select();
         for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
         {
             PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
@@ -111,7 +122,6 @@ public class UIManager : Singleton<UIManager>
     private void DisplayLevelCanvas()
     {
         DisableOtherCanvas(levelCanvas);
-        _eventSystem.firstSelectedGameObject = null;
         isPaused = false;
         NaratorManager.Instance.audioSource.UnPause();
         for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
@@ -120,13 +130,14 @@ public class UIManager : Singleton<UIManager>
         }
         SetTimeScale(true);
         CursorState(false);
+
     }
     private void DisplayGameOverCanvas()
     {
         DisableOtherCanvas(gameOverCanvas);
-        _eventSystem.SetSelectedGameObject(gameOverFirstSelectedButton);
         SetTimeScale(false);
         CursorState(false);
+        gameOverFirstSelectedButton.Select();
     }
     private void DisplayPausedCanvas()
     {
@@ -135,9 +146,20 @@ public class UIManager : Singleton<UIManager>
         {
             PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
         }
-        _eventSystem.SetSelectedGameObject(pauseFirstSelectedButton);
         SetTimeScale(false);
         CursorState(false);
+        pauseFirstSelectedButton.Select();
+    }
+    private void DisplayCreditsCanvas()
+    {
+        DisableOtherCanvas(creditsCanvas);
+        for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+        {
+            PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().AllowInput(false);
+        }
+        SetTimeScale(false);
+        CursorState(false);
+        creditsFirstSelectedButton.Select();
     }
 
     #endregion
@@ -146,8 +168,11 @@ public class UIManager : Singleton<UIManager>
     public void StartGame()
     {
         state = CanvasState.Level;
+        NaratorManager.Instance.canPlayRandomClip = true;
+
         EventBus.Publish(EventType.UI_CHANGED);        
         EventBus.Publish(EventType.ENABLE_JOINING);
+        EventBus.Publish(EventType.LEVEL_CHANGED);
     }
     public void ExitGame()
     {
@@ -160,13 +185,46 @@ public class UIManager : Singleton<UIManager>
         state = CanvasState.Level;
         EventBus.Publish(EventType.UI_CHANGED);
     }
+    public void Credits()
+    {
+        state = CanvasState.Credits;
+        EventBus.Publish(EventType.UI_CHANGED);
+    }
     public void Menu()
     {
         state = CanvasState.Start;
         GameManager.Instance.ResetGame();
         EventBus.Publish(EventType.UI_CHANGED);
-
     }
+
+    public void PlayerLeave()
+    {
+        //If there is more than one player than let them leave
+        if (PlayerManager.Instance.playerConfigs.Count > 1)
+        {
+            PlayerController leavingPlayer = null;
+            leavingPlayer = _eventSystem.playerRoot.GetComponent<PlayerController>();
+            Debug.LogWarning(leavingPlayer);
+            leavingPlayer.classData.ResetValuesToDefault();
+            //Resets players stats to base and then destorys player
+            for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+            {
+                //Clears player lists
+                if (PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>() == leavingPlayer)
+                {
+                    PlayerManager.Instance.playerConfigs.RemoveAt(i);
+                    PlayerManager.Instance.usedClasses.RemoveAt(i);                    
+                    leavingPlayer.m_inventory = null;
+                    Destroy(gameObject);
+                }
+            }
+            EventBus.Publish(EventType.PLAYER_LEFT);
+        }
+        //If there is only one player then take back to start and reset game
+        else
+            Menu();
+    }
+
     #endregion
 
 
@@ -230,7 +288,7 @@ public class UIManager : Singleton<UIManager>
     /// Sets time scale to 1 if <paramref name="isPlaying"/> is true or to 0 if <paramref name="isPlaying"/> is false
     /// </summary>
     /// <param name="isPlaying"></param>
-    private void SetTimeScale(bool isPlaying)
+    public void SetTimeScale(bool isPlaying)
     {
         Time.timeScale = isPlaying ? 1f : 0f;
     }
@@ -306,8 +364,34 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private void RemovePlayerFromUI()
+    private void RefreshPlayerUIActiveState()
     {
+        warrior.gameObject.SetActive(false);
+        valkyrie.gameObject.SetActive(false);
+        wizzard.gameObject.SetActive(false);
+        elf.gameObject.SetActive(false);
 
+        for (int i = 0; i < PlayerManager.Instance.playerConfigs.Count; i++)
+        {
+            ClassData player = PlayerManager.Instance.playerConfigs[i].PlayerParent.GetComponent<PlayerController>().classData;
+
+            switch (player.ClassType)
+            {
+                case ClassEnum.Warrior:
+                    warrior.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Valkyrie:
+                    valkyrie.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Wizard:
+                    wizzard.gameObject.SetActive(true);
+                    break;
+                case ClassEnum.Elf:
+                    elf.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

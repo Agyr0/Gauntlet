@@ -16,17 +16,24 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [Header("Variables")]
     [SerializeField] private float spawnRadius = 3f;
-    [SerializeField]
-    private int maxPlayers = 4;
+
 
     [SerializeField]
     private List<ClassData> possibleClasses = new List<ClassData>();
-    private List<int> usedClasses = new List<int>();
+    public List<int> usedClasses = new List<int>();
 
     private void OnEnable()
     {
         playerManager = GetComponent<PlayerInputManager>();
         EventBus.Subscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
+        EventBus.Subscribe(EventType.DISABLE_JOINING, DisablePlayerJoining);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(EventType.ENABLE_JOINING, EnablePlayerJoining);
+        EventBus.Unsubscribe(EventType.DISABLE_JOINING, DisablePlayerJoining);
+
     }
 
     private void Update()
@@ -38,6 +45,10 @@ public class PlayerManager : Singleton<PlayerManager>
     private void EnablePlayerJoining()
     {
         playerManager.EnableJoining();
+    }
+    private void DisablePlayerJoining()
+    {
+        playerManager.DisableJoining();
 
     }
 
@@ -47,7 +58,6 @@ public class PlayerManager : Singleton<PlayerManager>
         if (playerConfigs.Count == 0)
         {
             EventBus.Publish(EventType.GAME_START);
-            EventBus.Publish(EventType.NEXT_ROUND);
         }
        // Debug.Log(player.gameObject.GetComponent<PlayerController>().classData.PlayerPrefab);
         
@@ -77,7 +87,8 @@ public class PlayerManager : Singleton<PlayerManager>
             }
         }
         //Assign the new player with the class at classIndex
-        playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = possibleClasses[classIndex];
+        playerConfigs[player.playerIndex].PlayerClass = possibleClasses[classIndex];
+        playerConfigs[player.playerIndex].PlayerParent.GetComponent<PlayerController>().classData = playerConfigs[player.playerIndex].PlayerClass;
         //Add the class index to the usedClasses
         usedClasses.Add(classIndex);
         EventBus.Publish(EventType.PLAYER_JOINED);
@@ -90,7 +101,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private Vector3 FindSpawnPos()
     {
-        Vector2 newPos = Random.insideUnitCircle * spawnRadius;
+        Vector2 newPos = Random.insideUnitCircle * spawnRadius * camTarget.transform.position;
         int maxTrys = 10;
         int curTry = 0;
         while (curTry < maxTrys)
@@ -142,11 +153,16 @@ public class PlayerConfiguration
         PlayedAboutToDie = false;
         PlayedLowHealth = false;
         PlayedNeedFood = false;
+        PlayerDevice = player.devices[0];
     }
     [SerializeField]
-    public ClassData PlayerClass { get; set; }
+    public Transform parent;
     [SerializeField]
-    public Transform PlayerParent { get; set; }
+    public ClassData _class;
+    [SerializeField]
+    public ClassData PlayerClass { get { return _class; } set { _class = value; } }
+    [SerializeField]
+    public Transform PlayerParent { get { return parent; } set { parent = value; } }
     [SerializeField]
     public PlayerInput Input { get; set; }
     [SerializeField]
@@ -157,6 +173,8 @@ public class PlayerConfiguration
     public bool PlayedLowHealth { get; set; }
     [SerializeField]
     public bool PlayedNeedFood { get; set; }
+    [SerializeField]
+    public InputDevice PlayerDevice { get; set; }
     
 
 }

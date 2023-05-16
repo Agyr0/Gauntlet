@@ -7,6 +7,7 @@ public enum EventType
     GAME_START,
 
     ENABLE_JOINING,
+    DISABLE_JOINING,
 
     //Player Join/Leave
     PLAYER_JOINED,

@@ -7,6 +7,7 @@ public class FoodItem : MonoBehaviour, IFloorItem
 {
     //private float scoreAmount = 100f;
     private float healthAmount = 100f;
+    [SerializeField] private bool canShoot = false;
 
     public void HandlePickup(PlayerController player)
     {
@@ -22,8 +23,12 @@ public class FoodItem : MonoBehaviour, IFloorItem
         Destroy(gameObject);
     }
 
-    public void HandleShot()
+    public void HandleShot(PlayerController player)
     {
-        Destroy(gameObject);
+        if(canShoot)
+        {
+            Destroy(gameObject);
+            NaratorManager.Instance.AssignNarationAndPlay(PromptType.PlayerShotFood, 3, player.classData);
+        }
     }
 }

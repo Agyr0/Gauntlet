@@ -18,11 +18,13 @@ MonoBehaviour:
   classType: 2
   curHealth: 694
   curSpeed: 10
+  armor: 1
   shootTime: 0.3
   keys: 0
   potions: 0
   numItems: 0
-  melee: 0
-  strength: 0
-  magic: 0
+  melee: 1
+  strength: 1
+  magic: 3
   score: 0
+  myUIInventory: {fileID: 0}

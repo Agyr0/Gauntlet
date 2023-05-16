@@ -19,6 +19,8 @@ public class UIManagerEditor : Editor
 
     SerializedProperty gameOverCanvas;
     SerializedProperty gameOverFirstSelectedButton;
+    SerializedProperty creditsCanvas;
+    SerializedProperty creditsFirstSelectedButton;
 
     SerializedProperty levelCanvas;
     SerializedProperty title;
@@ -47,12 +49,11 @@ public class UIManagerEditor : Editor
 
     #endregion
 
-    bool  levelGroup, startGroup, pauseGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup, gameOverGroup = false;      
+    bool  levelGroup, startGroup, pauseGroup, warriorGroup, valkyrieGroup, wizzardGroup, elfGroup, gameOverGroup, creditsGroup = false;      
 
     private void OnEnable()
     {
         state = serializedObject.FindProperty("state");
-        _eventSystem = serializedObject.FindProperty("_eventSystem");
 
         startCanvas = serializedObject.FindProperty("startCanvas");     
         startFirstSelectedButton = serializedObject.FindProperty("startFirstSelectedButton");     
@@ -62,6 +63,9 @@ public class UIManagerEditor : Editor
 
         gameOverCanvas = serializedObject.FindProperty("gameOverCanvas");
         gameOverFirstSelectedButton = serializedObject.FindProperty("gameOverFirstSelectedButton");
+
+        creditsCanvas = serializedObject.FindProperty("creditsCanvas");
+        creditsFirstSelectedButton = serializedObject.FindProperty("creditsFirstSelectedButton");
 
         levelCanvas = serializedObject.FindProperty("levelCanvas");
         title = serializedObject.FindProperty("title");
@@ -136,6 +140,21 @@ public class UIManagerEditor : Editor
             EditorGUILayout.Space(10);
             EditorGUILayout.PropertyField(gameOverCanvas);
             EditorGUILayout.PropertyField(gameOverFirstSelectedButton);
+            EditorGUILayout.Space(10);
+
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        #endregion
+
+        EditorGUILayout.Space(10);
+
+        #region Credits
+        creditsGroup = EditorGUILayout.BeginFoldoutHeaderGroup(creditsGroup, "Credits Canvas");
+        if (creditsGroup)
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.PropertyField(creditsCanvas);
+            EditorGUILayout.PropertyField(creditsFirstSelectedButton);
             EditorGUILayout.Space(10);
 
         }

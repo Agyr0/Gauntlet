@@ -20,6 +20,8 @@ public class ClassData : ScriptableObject, IPlayer
     [SerializeField]
     private float curSpeed;
     [SerializeField]
+    private float armor;
+    [SerializeField]
     private float shootTime;
     [SerializeField]
     private int keys;
@@ -63,6 +65,11 @@ public class ClassData : ScriptableObject, IPlayer
     public float CurSpeed
     {
         get { return curSpeed; }
+    }
+    public float Armor
+    {
+        get { return armor; }
+        set { armor = value; }
     }
     public float ShootTime 
     {

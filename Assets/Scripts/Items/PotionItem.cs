@@ -8,13 +8,13 @@ public class PotionItem : MonoBehaviour, IFloorItem
 
     public void HandlePickup(PlayerController player)
     {
-        InventoryManager.Instance.AddItemToInventory(player, data);
         gameObject.SetActive(false);
+        InventoryManager.Instance.AddItemToInventory(player, data);
     }
 
-    public void HandleShot()
+    public void HandleShot(PlayerController player)
     {
-        GameManager.Instance.UsePotion(true);
         gameObject.SetActive(false);
+        GameManager.Instance.UsePotion(player, this.gameObject);
     }
 }

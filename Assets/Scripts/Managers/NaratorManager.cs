@@ -61,7 +61,8 @@ public class NaratorManager : Singleton<NaratorManager>
 
     private IEnumerator RandomClip;
     private bool canPlayNameClip = true;
-
+    [HideInInspector]
+    public bool canPlayRandomClip = true;
     #region Lists
     public List<ClassData> classList = new List<ClassData>();
 
@@ -110,7 +111,8 @@ public class NaratorManager : Singleton<NaratorManager>
         EventBus.Subscribe(EventType.N_NAME_ABOUT_TO_DIE, AssignAndPlayAboutToDie);
 
         audioSource = GetComponent<AudioSource>();
-        RandomClip = PlayRandomClips();
+        //RandomClip = PlayRandomClips();
+        
     }
     private void OnDisable()
     {
@@ -218,6 +220,7 @@ public class NaratorManager : Singleton<NaratorManager>
     private void AssignAndPlayControlsAudio()
     {
         AssignNarationAndPlay(PromptType.Controls, 0);
+        RandomClip = PlayRandomClips();
         StartCoroutine(RandomClip);
     }
     private void AssignAndPlayNoFriendlyFire()
@@ -262,8 +265,11 @@ public class NaratorManager : Singleton<NaratorManager>
     private IEnumerator PlayRandomClips()
     {
         int lastIndex = 0;
-        while (true)
+        while (true && canPlayRandomClip)
         {
+            yield return new WaitUntil(() => audioSource.isPlaying == false);
+
+            Debug.LogWarning("Started playing random naration");
             int index = Random.Range(0, randomNarationEvents.Count);
             yield return new WaitForSeconds(waitTimeForRandomClip);
             if (!audioSource.isPlaying && index != lastIndex)
@@ -272,7 +278,6 @@ public class NaratorManager : Singleton<NaratorManager>
                 EventType eventToSend = randomNarationEvents[index];
                 EventBus.Publish(eventToSend);
             }
-            yield return new WaitUntil(() => audioSource.isPlaying == false);
             yield return null;
         }
     }

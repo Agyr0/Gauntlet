@@ -16,13 +16,15 @@ MonoBehaviour:
   playerPrefab: {fileID: 3404509210141209226, guid: 116e326c35daec94c91365d1340c0d22, type: 3}
   projectilePrefab: {fileID: 999021191262322043, guid: 1ba6d9ba3fb53fa458e51486c6665694, type: 3}
   classType: 3
-  curHealth: 749
-  curSpeed: 10
+  curHealth: 658
+  curSpeed: 13
+  armor: 1
   shootTime: 0.3
   keys: 0
   potions: 0
   numItems: 0
-  melee: 0
-  strength: 0
-  magic: 0
-  score: 100
+  melee: 1
+  strength: 1
+  magic: 1
+  score: 0
+  myUIInventory: {fileID: 0}

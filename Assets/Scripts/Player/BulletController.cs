@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
@@ -7,6 +9,8 @@ public class BulletController : MonoBehaviour
     [SerializeField] private float speed = 10f;
     private ScreenBorder screenBorder;
     private CapsuleCollider capsuleCollider;
+    public PlayerController m_player;
+    private string m_class;
 
     private void Start()
     {
@@ -27,7 +31,9 @@ public class BulletController : MonoBehaviour
     {
         if(other.gameObject.GetComponent<IFloorItem>() != null)
         {
-            other.gameObject.GetComponent<IFloorItem>().HandleShot();
+            other.gameObject.GetComponent<IFloorItem>().HandleShot(m_player);
+            gameObject.SetActive(false);
+
         }
     }
 
@@ -35,7 +41,8 @@ public class BulletController : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<IFloorItem>() != null)
         {
-            collision.gameObject.GetComponent<IFloorItem>().HandleShot();
+            collision.gameObject.GetComponent<IFloorItem>().HandleShot(m_player);
+            gameObject.SetActive(false);
         }
     }
 }

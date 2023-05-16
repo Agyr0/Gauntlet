@@ -8,11 +8,12 @@ public class KeyItem : MonoBehaviour, IFloorItem
 
     public void HandlePickup(PlayerController player)
     {
-        InventoryManager.Instance.AddItemToInventory(player, data);
         gameObject.SetActive(false);
+        InventoryManager.Instance.AddItemToInventory(player, data);
+
     }
 
-    public void HandleShot()
+    public void HandleShot(PlayerController player)
     {
         
     }
