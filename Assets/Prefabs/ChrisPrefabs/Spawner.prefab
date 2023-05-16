@@ -370,7 +370,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 33f09ee90f7a8374d86c9c760c399223, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -422,6 +422,7 @@ MonoBehaviour:
   pointValue: 0
   swingCooldown: 0
   moveSpeed: 0
+  targetPlayer: {fileID: 0}
   detectionRadius: 100
   spawnDelay: 1
   spawnPoints:

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1961485798973243945}
   - component: {fileID: 1961485798973243943}
   - component: {fileID: 9140873238424520457}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BasePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,9 @@ MonoBehaviour:
     myPlayer: {fileID: 0}
     myPlayerClass: {fileID: 0}
     myPlayerClassType: 0
+    maxItems: 0
     myItems: []
+    uiItems: []
 --- !u!114 &9140873238424520457
 MonoBehaviour:
   m_ObjectHideFlags: 0

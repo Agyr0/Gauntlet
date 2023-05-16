@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/EnemyTesting/Level1.unity
+    guid: 7af8d90110e936e449463abd753a4c24
   m_configObjects: {}
