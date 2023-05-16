@@ -4,15 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bullet/Elf
-  - Bullet/Warrior
-  - Bullet/Wizard
   - Bullet/Valkyrie
-  - ScoreCanvas
+  - Bullet/Elf
+  - Bullet/Wizard
+  - Bullet/Warrior
+  - Grunt
   - Inventory/Key
   - Inventory/Potion
-  - PotionEffect
-  - DeathEffect
+  - ScoreCanvas
   layers:
   - Default
   - TransparentFX
@@ -20,7 +19,7 @@ TagManager:
   - Player
   - Water
   - UI
-  - Floor
+  - 
   - 
   - 
   - 

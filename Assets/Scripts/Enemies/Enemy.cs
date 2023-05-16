@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     protected PlayerController[] myPlayers = new PlayerController[4];
     protected LayerMask playerMask = 3;
     [SerializeField] protected float detectionRadius = 100f;
+    private Vector3 tempPos;
 
     //This can be triggered by the scene view camera as well as the main camera
     private void OnBecameVisible()
@@ -37,7 +38,7 @@ public class Enemy : MonoBehaviour
     {
         myPlayers = FindObjectsOfType<PlayerController>();
         //identifyPlayer();
-        targetPlayer = myPlayers[(Random.Range(0, 0))].gameObject;
+        targetPlayer = myPlayers[(Random.Range(0, 1))].gameObject;
         targetPlayerPlayer = targetPlayer.GetComponent<PlayerController>().player;
         StartCoroutine(Move());
     }
@@ -72,7 +73,9 @@ public class Enemy : MonoBehaviour
     {
         if(transform.position.x != targetPlayer.transform.position.x || transform.position.z != targetPlayer.transform.position.z)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPlayer.transform.position, Time.deltaTime*moveSpeed);
+            tempPos = Vector3.MoveTowards(transform.position, targetPlayer.transform.position, Time.deltaTime * moveSpeed);
+            tempPos.y = Mathf.Clamp(tempPos.y, 1f, 1f);
+            transform.position = tempPos;
         }
 
         yield return new WaitForFixedUpdate();
@@ -103,28 +106,28 @@ public class Enemy : MonoBehaviour
                 if(TakeDamage(100))
                 {
                     other.gameObject.SetActive(false);
-                    targetPlayerPlayer.Score += pointValue;
+                    //targetPlayerPlayer.Score += pointValue;
                 }
                 break;
             case "Bullet/Wizard":
                 if (TakeDamage(200))
                 {
                     other.gameObject.SetActive(false);
-                    targetPlayerPlayer.Score += pointValue;
+                    //targetPlayerPlayer.Score += pointValue;
                 }
                 break;
             case "Bullet/Valkyrie":
                 if (TakeDamage(120))
                 {
                     other.gameObject.SetActive(false);
-                    targetPlayerPlayer.Score += pointValue;
+                    //targetPlayerPlayer.Score += pointValue;
                 }
             break;
             case "Bullet/Elf":
                 if (TakeDamage(100))
                 {
                     other.gameObject.SetActive(false);
-                    targetPlayerPlayer.Score += pointValue;
+                    //targetPlayerPlayer.Score += pointValue;
                 }
             break;
             default:

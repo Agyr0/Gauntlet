@@ -171,7 +171,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6703871650688292903}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ValkyriePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
