@@ -11,7 +11,8 @@ public class Exit : MonoBehaviour
     {
         if(other.gameObject.layer == 3 )
         {
-            winCanvas.gameObject.SetActive(true);
+            UIManager.Instance.state = CanvasState.GameOver;
+            EventBus.Publish(EventType.UI_CHANGED);
         }
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1961485798973243945}
   - component: {fileID: 1961485798973243943}
   - component: {fileID: 9140873238424520457}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BasePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 3426786498938412874}
   - component: {fileID: 6135476532605268746}
   - component: {fileID: 7340104837721867612}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: EventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>
             //Damage all enemies on screen
             //If potion was used do damage based on class magic value
             if (hits[i].transform.GetComponent<Enemy>() != null)
-                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic);
+                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic * 100);
         }
         GameObject potion = ObjectPooler.Instance.GetPooledObject(potionEffect);
         if (potion != null)
@@ -88,7 +88,7 @@ public class GameManager : Singleton<GameManager>
             //Damage all enemies on screen
             //If potion was shot do less damage 
             if (hits[i].transform.GetComponent<Enemy>() != null)
-                hits[i].transform.GetComponent<Enemy>().TakeDamage((int)player.classData.Magic / 2);
+                hits[i].transform.GetComponent<Enemy>().TakeDamage(((int)player.classData.Magic / 2) * 100);
 
         }
         GameObject potion = ObjectPooler.Instance.GetPooledObject(potionEffect);
